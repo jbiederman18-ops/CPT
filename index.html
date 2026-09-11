@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Alternative Thoughts Worksheet</title>
+<style>
+  :root{
+    --ground:#E7ECEA;
+    --surface:#FCFDFC;
+    --ink:#1C2A2C;
+    --muted:#69797B;
+    --line:#CBD6D4;
+    --accent:#2E5B60;
+    --accent-soft:#DCE8E7;
+    --shift:#8A6A2F;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;background:var(--ground);}
+  body{
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:16px;line-height:1.5;
+    padding:20px 16px calc(120px + env(safe-area-inset-bottom));
+    max-width:640px;margin:0 auto;
+    -webkit-text-size-adjust:100%;
+  }
+  h1,h2{font-family:Georgia,"Iowan Old Style","Times New Roman",serif;font-weight:600;margin:0;}
+
+  .masthead{padding:8px 2px 22px;border-bottom:1px solid var(--line);margin-bottom:20px;}
+  .kicker{margin:0 0 2px;font-size:12px;letter-spacing:.06em;color:var(--muted);}
+  .masthead h1{font-size:30px;line-height:1.15;letter-spacing:-.01em;}
+  .tagline{margin:8px 0 0;color:var(--muted);font-size:14px;max-width:38ch;}
+
+  .progress-line{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;}
+  #progressCount{font-size:13px;color:var(--muted);}
+  .pips{display:flex;gap:5px;flex-wrap:wrap;}
+  .pip{width:9px;height:9px;border-radius:50%;border:1px solid var(--line);}
+  .pip.on{background:var(--accent);border-color:var(--accent);}
+
+  .entry-list{display:flex;flex-direction:column;gap:10px;}
+  .entry{
+    background:var(--surface);border:1px solid var(--line);border-radius:10px;
+    padding:14px 15px;text-align:left;width:100%;cursor:pointer;font:inherit;color:inherit;display:block;
+  }
+  .entry:hover,.entry:focus-visible{border-color:var(--accent);}
+  .entry .meta{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:6px;}
+  .entry .num,.entry .date{font-size:12px;color:var(--muted);}
+  .entry .thought{font-family:Georgia,serif;font-size:16px;line-height:1.4;margin:0 0 12px;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  .entry .thought.empty{color:var(--muted);font-style:italic;}
+
+  .track{position:relative;height:26px;margin-top:2px;}
+  .track .rail{position:absolute;top:11px;left:0;right:0;height:2px;background:var(--line);border-radius:2px;}
+  .track .span{position:absolute;top:11px;height:2px;background:var(--shift);}
+  .track .dot{position:absolute;top:6px;width:12px;height:12px;border-radius:50%;margin-left:-6px;background:var(--surface);border:2px solid var(--accent);}
+  .track .dot.after{background:var(--accent);}
+  .track-caption{font-size:12px;color:var(--muted);margin:2px 0 0;}
+
+  .empty-slot{border:1px dashed var(--line);border-radius:10px;padding:14px 15px;font-size:13px;color:var(--muted);}
+
+  .list-actions{display:flex;flex-direction:column;gap:9px;margin-top:20px;}
+
+  .btn{font:inherit;font-size:15px;border-radius:9px;padding:12px 16px;cursor:pointer;
+    border:1px solid var(--line);background:var(--surface);color:var(--ink);}
+  .btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500;}
+  .btn.quiet{background:transparent;}
+  .btn.small{font-size:13px;padding:8px 12px;}
+  .btn.back{font-size:13px;padding:7px 12px;background:transparent;}
+  .btn.delete{font-size:13px;padding:9px 13px;background:transparent;border-color:#C9A6A6;color:#8A4A4A;}
+
+  details.settings{margin-top:22px;border-top:1px solid var(--line);padding-top:14px;}
+  details.settings summary{font-size:13px;color:var(--muted);cursor:pointer;}
+  .set-body{margin-top:14px;}
+  .field{margin-bottom:12px;}
+  .field label{display:block;font-size:13px;color:var(--muted);margin-bottom:5px;}
+  input[type=text],input[type=url],textarea{
+    width:100%;font:inherit;font-size:16px;color:var(--ink);background:#fff;
+    border:1px solid var(--line);border-radius:8px;padding:10px 11px;resize:vertical;}
+  input:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:var(--accent);}
+  .set-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
+  .sync-note{font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.45;}
+
+  .editor-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+  .editor-date{font-size:12px;color:var(--muted);}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px;}
+  .card.accent-card{background:var(--accent-soft);border-color:#B9CFCD;}
+  .card-head{display:flex;align-items:baseline;gap:9px;margin-bottom:6px;}
+  .letter{font-family:Georgia,serif;font-size:13px;color:var(--accent);border:1px solid var(--accent);
+    width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none;}
+  .card h2{font-size:18px;}
+  .prompt{margin:0 0 12px;font-size:13.5px;color:var(--muted);line-height:1.45;max-width:52ch;}
+
+  .rate-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:14px 0 2px;}
+  .rate-row label{font-size:13px;color:var(--muted);}
+  .rate-val{font-family:Georgia,serif;font-size:21px;color:var(--accent);}
+  input[type=range]{width:100%;accent-color:var(--accent);height:26px;}
+
+  .cores{display:flex;flex-wrap:wrap;gap:6px;}
+  .core{font:inherit;font-size:13.5px;padding:7px 13px;border-radius:999px;cursor:pointer;
+    border:1px solid rgba(0,0,0,.12);color:#2B2823;}
+  .core[aria-expanded=true]{box-shadow:inset 0 0 0 2px rgba(0,0,0,.4);}
+  .panel{margin-top:10px;border:1px solid var(--line);border-radius:10px;padding:12px;background:#fff;}
+  .panel[hidden]{display:none;}
+  .grp{border-top:1px solid #EDF1F0;padding-top:9px;margin-top:9px;}
+  .grp:first-child{border-top:none;padding-top:0;margin-top:0;}
+  .word{font:inherit;font-size:13.5px;border:1px solid var(--line);background:#fff;border-radius:999px;
+    padding:6px 11px;cursor:pointer;color:var(--ink);}
+  .word.sec{font-weight:600;}
+  .tertiary{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+  .find{margin-top:10px;}
+  .results{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+
+  .emo-row{border-top:1px solid var(--line);padding-top:10px;margin-top:10px;}
+  .emo-top{display:flex;align-items:center;gap:8px;}
+  .swatch{width:12px;height:12px;border-radius:50%;flex:none;border:1px solid rgba(0,0,0,.2);}
+  .emo-top input[type=text]{flex:1;}
+  .emo-val{font-family:Georgia,serif;font-size:18px;color:var(--accent);min-width:34px;text-align:right;}
+  .rm{font:inherit;font-size:18px;line-height:1;border:none;background:transparent;color:var(--muted);cursor:pointer;padding:4px 6px;}
+  .emo-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+
+  .q{border-top:1px solid var(--line);padding-top:12px;margin-top:12px;}
+  .q:first-child{border-top:none;padding-top:0;margin-top:0;}
+  .q label{display:block;font-family:Georgia,serif;font-size:15.5px;margin-bottom:7px;}
+
+  .patterns{display:flex;flex-direction:column;gap:7px;margin-bottom:12px;}
+  .pattern{display:flex;gap:10px;align-items:flex-start;font:inherit;font-size:14.5px;text-align:left;
+    border:1px solid var(--line);background:transparent;border-radius:9px;padding:11px 12px;cursor:pointer;color:var(--ink);width:100%;}
+  .pattern .box{width:18px;height:18px;border:1px solid var(--muted);border-radius:4px;flex:none;margin-top:1px;
+    display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;}
+  .pattern.on{border-color:var(--accent);background:var(--accent-soft);}
+  .pattern.on .box{background:var(--accent);border-color:var(--accent);}
+
+  .shift{margin-top:14px;font-size:14px;font-family:Georgia,serif;}
+  .shift em{color:var(--shift);font-style:normal;}
+
+  .danger-row{margin-top:18px;}
+
+  .savebar{position:fixed;left:0;right:0;bottom:0;padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+    background:rgba(231,236,234,.95);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+    border-top:1px solid var(--line);}
+  .savebar > div{max-width:640px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .save-status{font-size:12.5px;color:var(--muted);}
+  .save-status.done{color:var(--accent);}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <p class="kicker">Handout 11.1</p>
+  <h1>Alternative Thoughts</h1>
+  <p class="tagline">A worksheet you fill in more than once. Each one is saved.</p>
+</header>
+
+<section id="listView">
+  <div class="progress-line">
+    <span id="progressCount">0 of 7 complete</span>
+    <div class="pips" id="pips"></div>
+  </div>
+
+  <div id="entryList" class="entry-list"></div>
+
+  <div class="list-actions">
+    <button class="btn primary" id="newBtn">Start a new worksheet</button>
+    <button class="btn quiet" id="exportBtn">Export all as text</button>
+  </div>
+
+  <details class="settings">
+    <summary>Backup and sync</summary>
+    <div class="set-body">
+      <p class="sync-note" id="storeMode"></p>
+
+      <div class="field">
+        <label for="endpoint">Google Sheet web app URL</label>
+        <input type="url" id="endpoint" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="token">Shared secret (must match the script)</label>
+        <input type="text" id="token" placeholder="Leave blank if you didn't set one" autocomplete="off">
+      </div>
+      <div class="set-row">
+        <button class="btn small" id="saveSettings">Save settings</button>
+        <button class="btn small" id="pushBtn">Send to sheet</button>
+        <button class="btn small" id="pullBtn">Load from sheet</button>
+      </div>
+      <p class="sync-note" id="syncNote">Not connected. Everything stays on this device until you add a URL.</p>
+
+      <div class="set-row" style="margin-top:16px">
+        <button class="btn small" id="jsonOut">Download backup file</button>
+        <button class="btn small" id="jsonIn">Restore from backup file</button>
+        <input type="file" id="fileIn" accept="application/json,.json" hidden>
+      </div>
+      <p class="sync-note">These worksheets hold private material. Anyone with the web app URL and the secret can read the sheet, so keep both to yourself.</p>
+    </div>
+  </details>
+</section>
+
+<section id="editorView" hidden>
+  <div class="editor-top">
+    <button class="btn back" id="backBtn">Back to list</button>
+    <span class="editor-date" id="editorDate"></span>
+  </div>
+
+  <article class="card">
+    <div class="card-head"><span class="letter">A</span><h2>Situation</h2></div>
+    <p class="prompt">The event, thought, or belief that led to the unpleasant emotion.</p>
+    <textarea id="fA" rows="3" placeholder="What happened?"></textarea>
+  </article>
+
+  <article class="card">
+    <div class="card-head"><span class="letter">B</span><h2>Thought / Stuck Point</h2></div>
+    <p class="prompt">The thought tied to the situation above.</p>
+    <textarea id="fB" rows="3" placeholder="Write the thought as you hear it"></textarea>
+    <div class="rate-row"><label for="fBrate">How much do you believe it?</label><output class="rate-val" id="fBrateVal">50</output></div>
+    <input type="range" id="fBrate" min="0" max="100" value="50">
+  </article>
+
+  <article class="card">
+    <div class="card-head"><span class="letter">C</span><h2>Emotions</h2></div>
+    <p class="prompt">Pick a family, then narrow it down. Rate each feeling 0 to 100.</p>
+    <div id="pickC"></div>
+    <div class="emo-list" id="emoC"></div>
+    <div class="emo-actions"><button class="btn small" data-add="C">Type my own</button></div>
+  </article>
+
+  <article class="card">
+    <div class="card-head"><span class="letter">D</span><h2>Exploring questions</h2></div>
+    <p class="prompt">Examine the thought in section B. Is it balanced and factual, or extreme?</p>
+    <div id="questionsD"></div>
+  </article>
+
+  <article class="card">
+    <div class="card-head"><span class="letter">E</span><h2>Thinking patterns</h2></div>
+    <p class="prompt">Tap any pattern the thought falls into.</p>
+    <div class="patterns" id="patternsE"></div>
+    <textarea id="fEother" rows="2" placeholder="Another pattern you notice (optional)"></textarea>
+  </article>
+
+  <article class="card">
+    <div class="card-head"><span class="letter">F</span><h2>Alternative thought</h2></div>
+    <p class="prompt">What else could you say instead? Another way to read the same event.</p>
+    <textarea id="fF" rows="4" placeholder="Write the alternative"></textarea>
+    <div class="rate-row"><label for="fFrate">How much do you believe the alternative?</label><output class="rate-val" id="fFrateVal">50</output></div>
+    <input type="range" id="fFrate" min="0" max="100" value="50">
+  </article>
+
+  <article class="card accent-card">
+    <div class="card-head"><span class="letter">G</span><h2>Rerate the old thought</h2></div>
+    <p class="prompt">How much do you believe the section B thought now?</p>
+    <div class="rate-row"><label for="fGrate">Belief now</label><output class="rate-val" id="fGrateVal">50</output></div>
+    <input type="range" id="fGrate" min="0" max="100" value="50">
+    <div class="shift" id="shiftPreview"></div>
+  </article>
+
+  <article class="card">
+    <div class="card-head"><span class="letter">H</span><h2>Emotions now</h2></div>
+    <p class="prompt">What do you feel now, and how strongly?</p>
+    <div id="pickH"></div>
+    <div class="emo-list" id="emoH"></div>
+    <div class="emo-actions">
+      <button class="btn small" data-add="H">Type my own</button>
+      <button class="btn small" id="copyEmo">Bring over the feelings from C</button>
+    </div>
+  </article>
+
+  <div class="danger-row"><button class="btn delete" id="deleteBtn">Delete this worksheet</button></div>
+</section>
+
+<div class="savebar" id="savebar" hidden>
+  <div>
+    <span class="save-status" id="saveStatus">Not saved yet</span>
+    <button class="btn primary" id="saveBtn">Save worksheet</button>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+var WHEEL=[
+ {core:"Happy",color:"#F7F27E",groups:[
+   ["Playful",["Aroused","Cheeky"]],["Content",["Free","Joyful"]],["Interested",["Curious","Inquisitive"]],
+   ["Proud",["Successful","Confident"]],["Accepted",["Respected","Valued"]],["Powerful",["Courageous","Creative"]],
+   ["Peaceful",["Loving","Thankful"]],["Trusting",["Sensitive","Intimate"]],["Optimistic",["Hopeful","Inspired"]]]},
+ {core:"Surprised",color:"#C3AEE3",groups:[
+   ["Startled",["Shocked","Dismayed"]],["Confused",["Disillusioned","Perplexed"]],
+   ["Amazed",["Astonished","Awe"]],["Excited",["Eager","Energetic"]]]},
+ {core:"Bad",color:"#8FD9AE",groups:[
+   ["Bored",["Indifferent","Apathetic"]],["Busy",["Pressured","Rushed"]],
+   ["Stressed",["Overwhelmed","Out of control"]],["Tired",["Sleepy","Unfocussed"]]]},
+ {core:"Fearful",color:"#F6C871",groups:[
+   ["Scared",["Helpless","Frightened"]],["Anxious",["Overwhelmed","Worried"]],["Insecure",["Inadequate","Inferior"]],
+   ["Weak",["Worthless","Insignificant"]],["Rejected",["Excluded","Persecuted"]],["Threatened",["Nervous","Exposed"]]]},
+ {core:"Angry",color:"#F79191",groups:[
+   ["Let down",["Betrayed","Resentful"]],["Humiliated",["Disrespected","Ridiculed"]],["Bitter",["Indignant","Violated"]],
+   ["Mad",["Furious","Jealous"]],["Aggressive",["Provoked","Hostile"]],["Frustrated",["Infuriated","Annoyed"]],
+   ["Distant",["Withdrawn","Numb"]],["Critical",["Sceptical","Dismissive"]]]},
+ {core:"Disgusted",color:"#B7B7B7",groups:[
+   ["Disapproving",["Judgmental","Embarrassed"]],["Disappointed",["Appalled","Revolted"]],
+   ["Awful",["Nauseated","Detestable"]],["Repelled",["Horrified","Hesitant"]]]},
+ {core:"Sad",color:"#9CC5E9",groups:[
+   ["Lonely",["Isolated","Abandoned"]],["Vulnerable",["Victimised","Fragile"]],["Despair",["Grief","Powerless"]],
+   ["Guilty",["Ashamed","Remorseful"]],["Depressed",["Inferior","Empty"]],["Hurt",["Embarrassed","Disappointed"]]]}
+];
+var FLAT=[];
+WHEEL.forEach(function(f){
+  FLAT.push({name:f.core,color:f.color});
+  f.groups.forEach(function(g){
+    FLAT.push({name:g[0],color:f.color});
+    g[1].forEach(function(t){FLAT.push({name:t,color:f.color});});
+  });
+});
+
+var QUESTIONS=[
+  ['q1','What is the evidence against this thought?'],
+  ['q2','What information am I not including?'],
+  ['q3','Is this all-or-none, extreme, or exaggerated?'],
+  ['q4','Am I overfocused on just one piece of it?'],
+  ['q5','Is the source of this questionable?'],
+  ['q6','Am I confusing something possible with something definite?'],
+  ['q7','Is this based on feelings or on facts?']
+];
+var PATTERNS=[
+  ['p1','Jumping to conclusions or predicting the future'],
+  ['p2','Ignoring important parts of the situation'],
+  ['p3','Oversimplifying or overreaching'],
+  ['p4','Mind reading'],
+  ['p5','Emotional reasoning']
+];
+var FIELDMAP={fA:'a',fB:'b',fF:'f',fEother:'eOther'};
+
+var KEY='cpt-alt-thoughts-v2', CFGKEY='cpt-alt-thoughts-cfg', GOAL=7;
+var entries=[], draft=null, dirty=false, timer=null, cfg={endpoint:'',token:''};
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+var Store=(function(){
+  var mode='none';
+  try{ localStorage.setItem('__t','1'); localStorage.removeItem('__t'); mode='local'; }
+  catch(e){ if(window.storage) mode='artifact'; }
+  return {
+    mode:mode,
+    get:function(k){
+      if(mode==='local') return Promise.resolve(localStorage.getItem(k));
+      if(mode==='artifact') return window.storage.get(k).then(function(r){return r?r.value:null;}).catch(function(){return null;});
+      return Promise.resolve(null);
+    },
+    set:function(k,v){
+      if(mode==='local'){ localStorage.setItem(k,v); return Promise.resolve(); }
+      if(mode==='artifact') return window.storage.set(k,v);
+      return Promise.resolve();
+    }
+  };
+})();
+
+function blank(){
+  var e={id:'w'+Date.now()+Math.floor(Math.random()*999),created:Date.now(),updated:Date.now(),
+    a:'',b:'',bRate:50,f:'',fRate:50,gRate:50,eOther:'',emoC:[],emoH:[],questions:{},patterns:{}};
+  QUESTIONS.forEach(function(q){e.questions[q[0]]='';});
+  PATTERNS.forEach(function(p){e.patterns[p[0]]=false;});
+  return e;
+}
+function complete(e){return !!(e.b&&e.b.trim()&&e.f&&e.f.trim());}
+function fmtDate(ts){return new Date(ts).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});}
+
+function renderList(){
+  var done=entries.filter(complete).length;
+  $('progressCount').textContent=done+' of '+GOAL+' complete';
+  var p='';
+  for(var i=0;i<Math.max(GOAL,entries.length);i++) p+='<span class="pip'+(i<done?' on':'')+'"></span>';
+  $('pips').innerHTML=p;
+
+  var host=$('entryList'); host.innerHTML='';
+  var sorted=entries.slice().sort(function(a,b){return b.created-a.created;});
+  sorted.forEach(function(e,i){
+    var b=document.createElement('button'); b.type='button'; b.className='entry';
+    b.innerHTML='<div class="meta"><span class="num">Worksheet '+(entries.length-i)+'</span>'+
+      '<span class="date">'+fmtDate(e.created)+'</span></div>'+
+      '<p class="thought'+(e.b?'':' empty')+'">'+esc(e.b||'No thought written yet')+'</p>'+track(e);
+    b.addEventListener('click',function(){openEntry(e.id);});
+    host.appendChild(b);
+  });
+  for(var s=entries.length;s<GOAL;s++){
+    var d=document.createElement('div'); d.className='empty-slot';
+    d.textContent='Worksheet '+(s+1)+' — not started'; host.appendChild(d);
+  }
+}
+function track(e){
+  if(!complete(e)) return '<p class="track-caption">Not finished yet</p>';
+  var a=e.bRate,c=e.gRate,lo=Math.min(a,c),hi=Math.max(a,c);
+  return '<div class="track"><div class="rail"></div><div class="span" style="left:'+lo+'%;width:'+(hi-lo)+'%"></div>'+
+    '<div class="dot" style="left:'+a+'%"></div><div class="dot after" style="left:'+c+'%"></div></div>'+
+    '<p class="track-caption">Belief in the thought: '+a+' before, '+c+' after</p>';
+}
+
+function show(v){
+  $('listView').hidden=v!=='list'; $('editorView').hidden=v!=='editor'; $('savebar').hidden=v!=='editor';
+  window.scrollTo(0,0);
+}
+function openEntry(id){
+  draft=entries.filter(function(e){return e.id===id;})[0]||blank();
+  fill(); show('editor'); status('Saved',true);
+}
+function newEntry(){ draft=blank(); entries.push(draft); fill(); show('editor'); status('Not saved yet',false); }
+
+function fill(){
+  $('editorDate').textContent=fmtDate(draft.created);
+  $('fA').value=draft.a; $('fB').value=draft.b; $('fF').value=draft.f; $('fEother').value=draft.eOther||'';
+  setRange('fBrate',draft.bRate); setRange('fFrate',draft.fRate); setRange('fGrate',draft.gRate);
+
+  var qh=$('questionsD'); qh.innerHTML='';
+  QUESTIONS.forEach(function(q){
+    var w=document.createElement('div'); w.className='q';
+    w.innerHTML='<label for="'+q[0]+'">'+q[1]+'</label><textarea id="'+q[0]+'" rows="2"></textarea>';
+    qh.appendChild(w);
+    var ta=w.querySelector('textarea'); ta.value=draft.questions[q[0]]||'';
+    ta.addEventListener('input',function(){draft.questions[q[0]]=ta.value;touch();});
+  });
+
+  var ph=$('patternsE'); ph.innerHTML='';
+  PATTERNS.forEach(function(p){
+    var b=document.createElement('button'); b.type='button';
+    b.className='pattern'+(draft.patterns[p[0]]?' on':'');
+    b.innerHTML='<span class="box">'+(draft.patterns[p[0]]?'\u2713':'')+'</span><span>'+p[1]+'</span>';
+    b.addEventListener('click',function(){
+      draft.patterns[p[0]]=!draft.patterns[p[0]];
+      b.classList.toggle('on',draft.patterns[p[0]]);
+      b.querySelector('.box').textContent=draft.patterns[p[0]]?'\u2713':'';
+      touch();
+    });
+    ph.appendChild(b);
+  });
+
+  buildPicker('C'); buildPicker('H');
+  renderEmotions('C'); renderEmotions('H');
+  updateShift();
+}
+function setRange(id,v){ $(id).value=v; $(id+'Val').textContent=v; }
+
+function buildPicker(which){
+  var host=$('pick'+which); host.innerHTML='';
+  var cores=document.createElement('div'); cores.className='cores';
+  var panel=document.createElement('div'); panel.className='panel'; panel.hidden=true;
+  var find=document.createElement('input');
+  find.type='text'; find.className='find'; find.placeholder='Or search every feeling';
+  var results=document.createElement('div'); results.className='results';
+
+  WHEEL.forEach(function(fam){
+    var b=document.createElement('button'); b.type='button'; b.className='core';
+    b.style.background=fam.color; b.textContent=fam.core; b.setAttribute('aria-expanded','false');
+    b.addEventListener('click',function(){
+      var open=b.getAttribute('aria-expanded')==='true';
+      var all=cores.querySelectorAll('.core');
+      for(var i=0;i<all.length;i++) all[i].setAttribute('aria-expanded','false');
+      if(open){ panel.hidden=true; return; }
+      b.setAttribute('aria-expanded','true');
+      showFamily(fam,panel,which);
+      panel.hidden=false;
+    });
+    cores.appendChild(b);
+  });
+
+  find.addEventListener('input',function(){
+    var q=find.value.trim().toLowerCase();
+    results.innerHTML='';
+    if(q.length<2) return;
+    FLAT.filter(function(w){return w.name.toLowerCase().indexOf(q)>-1;}).slice(0,24).forEach(function(w){
+      results.appendChild(wordBtn(w.name,w.color,which,find));
+    });
+  });
+
+  host.appendChild(cores); host.appendChild(panel); host.appendChild(find); host.appendChild(results);
+}
+function showFamily(fam,panel,which){
+  panel.innerHTML='';
+  var head=document.createElement('div'); head.className='grp';
+  var top=wordBtn(fam.core,fam.color,which); top.classList.add('sec');
+  head.appendChild(top);
+  panel.appendChild(head);
+  fam.groups.forEach(function(g){
+    var wrap=document.createElement('div'); wrap.className='grp';
+    var sec=wordBtn(g[0],fam.color,which); sec.classList.add('sec');
+    wrap.appendChild(sec);
+    var tw=document.createElement('div'); tw.className='tertiary';
+    g[1].forEach(function(t){ tw.appendChild(wordBtn(t,fam.color,which)); });
+    wrap.appendChild(tw);
+    panel.appendChild(wrap);
+  });
+}
+function wordBtn(name,color,which,clearInput){
+  var b=document.createElement('button'); b.type='button'; b.className='word'; b.textContent=name;
+  b.addEventListener('click',function(){
+    draft['emo'+which].push({name:name,val:50,color:color});
+    renderEmotions(which); touch();
+    if(clearInput){ clearInput.value=''; clearInput.dispatchEvent(new Event('input')); }
+  });
+  return b;
+}
+function renderEmotions(which){
+  var host=$('emo'+which); host.innerHTML='';
+  var list=draft['emo'+which];
+  list.forEach(function(item,idx){
+    var row=document.createElement('div'); row.className='emo-row';
+    row.innerHTML='<div class="emo-top">'+
+      '<span class="swatch" style="background:'+(item.color||'#ffffff')+'"></span>'+
+      '<input type="text" value="'+esc(item.name)+'" placeholder="Feeling">'+
+      '<span class="emo-val">'+item.val+'</span>'+
+      '<button class="rm" type="button" aria-label="Remove">\u00d7</button></div>'+
+      '<input type="range" min="0" max="100" value="'+item.val+'">';
+    var txt=row.querySelector('input[type=text]'), rng=row.querySelector('input[type=range]'), out=row.querySelector('.emo-val');
+    txt.addEventListener('input',function(){item.name=txt.value;touch();});
+    rng.addEventListener('input',function(){item.val=+rng.value;out.textContent=rng.value;touch();});
+    row.querySelector('.rm').addEventListener('click',function(){list.splice(idx,1);renderEmotions(which);touch();});
+    host.appendChild(row);
+  });
+}
+function updateShift(){
+  var b=+$('fBrate').value, g=+$('fGrate').value, d=b-g, el=$('shiftPreview');
+  if(d>0) el.innerHTML='Your belief in that thought dropped <em>'+d+' points</em>, from '+b+' to '+g+'.';
+  else if(d<0) el.innerHTML='Your belief rose <em>'+(-d)+' points</em>, from '+b+' to '+g+'.';
+  else el.innerHTML='Belief is unchanged at '+b+'. That happens; it often shifts across several worksheets.';
+}
+
+function touch(){ dirty=true; status('Unsaved changes',false); clearTimeout(timer); timer=setTimeout(save,2500); }
+function status(t,ok){ var el=$('saveStatus'); el.textContent=t; el.classList.toggle('done',!!ok); }
+function save(){
+  if(!draft) return Promise.resolve();
+  draft.updated=Date.now();
+  if(entries.indexOf(draft)===-1) entries.push(draft);
+  return Store.set(KEY,JSON.stringify(entries)).then(function(){
+    dirty=false;
+    status('Saved '+new Date().toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}),true);
+    renderList();
+    if(cfg.endpoint) push(true);
+  })['catch'](function(){ status('Could not save on this device.',false); });
+}
+
+function loadCfg(){
+  return Store.get(CFGKEY).then(function(v){
+    if(v){ try{ cfg=JSON.parse(v)||cfg; }catch(e){} }
+    $('endpoint').value=cfg.endpoint||''; $('token').value=cfg.token||'';
+    syncNote(cfg.endpoint?'Connected. Saves are copied to your sheet.':'Not connected. Everything stays on this device until you add a URL.');
+  });
+}
+function syncNote(t){ $('syncNote').textContent=t; }
+function push(quiet){
+  if(!cfg.endpoint){ syncNote('Add a web app URL first.'); return; }
+  if(!quiet) syncNote('Sending\u2026');
+  return fetch(cfg.endpoint,{method:'POST',body:JSON.stringify({action:'save',token:cfg.token,entries:entries})})
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d&&d.ok) syncNote('Sheet updated '+new Date().toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'})+' \u2014 '+d.count+' worksheets.');
+      else syncNote('The sheet refused it: '+((d&&d.error)||'unknown reason')+'.');
+    })['catch'](function(){ syncNote('Could not reach the sheet. Check the URL, and that the deployment is set to anyone.'); });
+}
+function pull(){
+  if(!cfg.endpoint){ syncNote('Add a web app URL first.'); return; }
+  syncNote('Loading\u2026');
+  fetch(cfg.endpoint+'?action=load&token='+encodeURIComponent(cfg.token))
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(!d||!d.ok){ syncNote('The sheet refused it: '+((d&&d.error)||'unknown reason')+'.'); return; }
+      var merged={};
+      entries.concat(d.entries||[]).forEach(function(e){
+        if(!merged[e.id]||(e.updated||0)>(merged[e.id].updated||0)) merged[e.id]=e;
+      });
+      entries=Object.keys(merged).map(function(k){return merged[k];});
+      Store.set(KEY,JSON.stringify(entries)).then(function(){
+        renderList(); syncNote('Loaded. You now have '+entries.length+' worksheets on this device.');
+      });
+    })['catch'](function(){ syncNote('Could not reach the sheet.'); });
+}
+
+function download(name,text,type){
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([text],{type:type||'text/plain'}));
+  a.download=name; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+function exportText(){
+  if(!entries.length) return;
+  var out=entries.slice().sort(function(a,b){return a.created-b.created;}).map(function(e,i){
+    var L=['ALTERNATIVE THOUGHTS WORKSHEET '+(i+1)+' \u2014 '+fmtDate(e.created),''];
+    L.push('A. Situation: '+(e.a||'\u2014'));
+    L.push('B. Thought / stuck point: '+(e.b||'\u2014')+'  [belief '+e.bRate+']');
+    L.push('C. Emotions: '+(e.emoC.map(function(x){return x.name+' '+x.val;}).join(', ')||'\u2014'));
+    L.push('D. Exploring questions:');
+    QUESTIONS.forEach(function(q){L.push('   '+q[1]+' '+(e.questions[q[0]]||'\u2014'));});
+    var pats=PATTERNS.filter(function(p){return e.patterns[p[0]];}).map(function(p){return p[1];});
+    if(e.eOther) pats.push(e.eOther);
+    L.push('E. Thinking patterns: '+(pats.join('; ')||'\u2014'));
+    L.push('F. Alternative thought: '+(e.f||'\u2014')+'  [belief '+e.fRate+']');
+    L.push('G. Old thought rerated: '+e.gRate);
+    L.push('H. Emotions now: '+(e.emoH.map(function(x){return x.name+' '+x.val;}).join(', ')||'\u2014'));
+    return L.join('\n');
+  }).join('\n\n--------------------\n\n');
+  download('alternative-thoughts.txt',out);
+}
+
+Object.keys(FIELDMAP).forEach(function(id){
+  $(id).addEventListener('input',function(){ draft[FIELDMAP[id]]=$(id).value; touch(); });
+});
+[['fBrate','bRate'],['fFrate','fRate'],['fGrate','gRate']].forEach(function(p){
+  $(p[0]).addEventListener('input',function(){
+    draft[p[1]]=+$(p[0]).value; $(p[0]+'Val').textContent=$(p[0]).value; updateShift(); touch();
+  });
+});
+var addBtns=document.querySelectorAll('[data-add]');
+for(var i=0;i<addBtns.length;i++){
+  (function(b){
+    b.addEventListener('click',function(){
+      var w=b.getAttribute('data-add');
+      draft['emo'+w].push({name:'',val:50,color:'#FFFFFF'});
+      renderEmotions(w); touch();
+    });
+  })(addBtns[i]);
+}
+$('copyEmo').addEventListener('click',function(){
+  draft.emoH=draft.emoC.map(function(x){return {name:x.name,val:x.val,color:x.color};});
+  renderEmotions('H'); touch();
+});
+$('newBtn').addEventListener('click',newEntry);
+$('saveBtn').addEventListener('click',function(){save();});
+$('exportBtn').addEventListener('click',exportText);
+$('backBtn').addEventListener('click',function(){
+  var p=dirty?save():Promise.resolve();
+  p.then(function(){renderList();show('list');});
+});
+$('deleteBtn').addEventListener('click',function(){
+  var i=entries.indexOf(draft); if(i>-1) entries.splice(i,1);
+  Store.set(KEY,JSON.stringify(entries)).then(function(){
+    draft=null; renderList(); show('list'); if(cfg.endpoint) push(true);
+  });
+});
+$('saveSettings').addEventListener('click',function(){
+  cfg.endpoint=$('endpoint').value.trim(); cfg.token=$('token').value.trim();
+  Store.set(CFGKEY,JSON.stringify(cfg)).then(function(){
+    syncNote(cfg.endpoint?'Saved. Try "Send to sheet" to test it.':'Cleared. Everything stays on this device.');
+  });
+});
+$('pushBtn').addEventListener('click',function(){push(false);});
+$('pullBtn').addEventListener('click',pull);
+$('jsonOut').addEventListener('click',function(){ download('alternative-thoughts-backup.json',JSON.stringify(entries),'application/json'); });
+$('jsonIn').addEventListener('click',function(){ $('fileIn').click(); });
+$('fileIn').addEventListener('change',function(){
+  var f=$('fileIn').files[0]; if(!f) return;
+  var r=new FileReader();
+  r.onload=function(){
+    try{
+      var incoming=JSON.parse(r.result), merged={};
+      entries.concat(incoming).forEach(function(e){
+        if(!merged[e.id]||(e.updated||0)>(merged[e.id].updated||0)) merged[e.id]=e;
+      });
+      entries=Object.keys(merged).map(function(k){return merged[k];});
+      Store.set(KEY,JSON.stringify(entries)).then(function(){
+        renderList(); syncNote('Restored. '+entries.length+' worksheets on this device.');
+      });
+    }catch(err){ syncNote('That file could not be read as a backup.'); }
+  };
+  r.readAsText(f);
+});
+window.addEventListener('beforeunload',function(){ if(dirty) save(); });
+
+Store.get(KEY).then(function(v){
+  if(v){ try{ entries=JSON.parse(v)||[]; }catch(e){ entries=[]; } }
+  return loadCfg();
+}).then(function(){
+  $('storeMode').textContent = Store.mode==='local'
+    ? 'Saving to this browser on this device.'
+    : (Store.mode==='artifact'
+      ? 'Saving inside Claude right now. Download the file to keep worksheets on your own device.'
+      : 'This browser is blocking storage, so use the backup file below.');
+  renderList(); show('list');
+});
+})();
+</script>
+</body>
+</html>
