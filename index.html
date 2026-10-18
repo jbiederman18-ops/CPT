@@ -1,678 +1,1127 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Alternative Thoughts Worksheet</title>
+<title>Challenging Beliefs Worksheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --ground:#E7ECEA;
-    --surface:#FCFDFC;
-    --ink:#1C2A2C;
-    --muted:#69797B;
-    --line:#CBD6D4;
-    --accent:#2E5B60;
-    --accent-soft:#DCE8E7;
-    --shift:#8A6A2F;
+:root{
+  --bg:#FBF0EA; --surface:#FFFAF7; --sunk:#F4E2DA; --ink:#3A2A2E; --muted:#7C666A;
+  --rule:#EDD9D0; --accent:#3F7562; --accent-soft:#DCEBE2; --accent-ink:#FFFFFF; --danger:#A5463C;
+  --warn-bg:#FCE6CF; --warn-ink:#6A3E12; --shadow:0 2px 10px rgba(120,70,50,.08);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1D1618; --surface:#291F22; --sunk:#36292D; --ink:#F4E8E3; --muted:#B8A3A5;
+    --rule:#3E2F33; --accent:#8CC4AC; --accent-soft:#2C3C35; --accent-ink:#13241C; --danger:#F09A8E;
+    --warn-bg:#40301C; --warn-ink:#F6D7AE; --shadow:0 2px 10px rgba(0,0,0,.25);
+    color-scheme:dark;
   }
-  *{box-sizing:border-box;}
-  html,body{margin:0;background:var(--ground);}
-  body{
-    color:var(--ink);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    font-size:16px;line-height:1.5;
-    padding:20px 16px calc(120px + env(safe-area-inset-bottom));
-    max-width:640px;margin:0 auto;
-    -webkit-text-size-adjust:100%;
-  }
-  h1,h2{font-family:Georgia,"Iowan Old Style","Times New Roman",serif;font-weight:600;margin:0;}
+}
+:root[data-theme="dark"]{
+  --bg:#1D1618; --surface:#291F22; --sunk:#36292D; --ink:#F4E8E3; --muted:#B8A3A5;
+  --rule:#3E2F33; --accent:#8CC4AC; --accent-soft:#2C3C35; --accent-ink:#13241C; --danger:#F09A8E;
+  --warn-bg:#40301C; --warn-ink:#F6D7AE; --shadow:0 2px 10px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+:root{ box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px); }
+html{ scroll-padding-top:env(safe-area-inset-top,0px); -webkit-text-size-adjust:100%; }
+*,*::before,*::after{ box-sizing:inherit; }
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"Nunito", ui-rounded, "SF Pro Rounded", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size:17px; line-height:1.55;
+}
+#app{ max-width:640px; margin:0 auto; padding:0 18px 136px; }
+button{ font:inherit; color:inherit; cursor:pointer; }
+:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; }
+h1,h2,h3,h4{ line-height:1.2; margin:0; }
 
-  .masthead{padding:8px 2px 22px;border-bottom:1px solid var(--line);margin-bottom:20px;}
-  .kicker{margin:0 0 2px;font-size:12px;letter-spacing:.06em;color:var(--muted);}
-  .masthead h1{font-size:30px;line-height:1.15;letter-spacing:-.01em;}
-  .tagline{margin:8px 0 0;color:var(--muted);font-size:14px;max-width:38ch;}
+/* Buttons */
+.btn, .primary, .ghost{
+  min-height:48px; padding:10px 18px; border-radius:999px; font-weight:800;
+  border:1.5px solid var(--rule); background:var(--surface);
+}
+.primary{ background:var(--accent); color:var(--accent-ink); border-color:var(--accent); box-shadow:0 3px 12px color-mix(in srgb, var(--accent) 30%, transparent); }
+.ghost{ background:transparent; }
+.danger{ color:var(--danger); border-color:color-mix(in srgb, var(--danger) 40%, transparent); }
+.big{ width:100%; min-height:58px; font-size:18px; }
+button:disabled{ opacity:.4; cursor:default; box-shadow:none; }
 
-  .progress-line{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;}
-  #progressCount{font-size:13px;color:var(--muted);}
-  .pips{display:flex;gap:5px;flex-wrap:wrap;}
-  .pip{width:9px;height:9px;border-radius:50%;border:1px solid var(--line);}
-  .pip.on{background:var(--accent);border-color:var(--accent);}
+/* Home */
+.home-head{ position:relative; padding:34px 2px 20px; }
+.home-art{ display:block; width:132px; height:auto; margin:0 0 14px -6px; }
+.home-head h1{ font-size:31px; font-weight:800; letter-spacing:-.01em; }
+.home-head p{ margin:6px 0 0; color:var(--muted); max-width:34ch; }
+.backup{
+  margin:16px 0 8px; padding:16px; border-radius:22px; background:var(--surface);
+  border:1px solid var(--rule); box-shadow:var(--shadow);
+}
+.backup.due{ background:var(--warn-bg); border-color:transparent; color:var(--warn-ink); }
+.backup p{ margin:2px 0 12px; font-size:15px; }
+.backup .row{ display:flex; gap:10px; }
+.backup .row button{ flex:1; padding:10px 12px; white-space:nowrap; }
+.backup.due .ghost{ color:var(--warn-ink); border-color:color-mix(in srgb, var(--warn-ink) 30%, transparent); }
+.note{ font-size:14px; color:var(--muted); margin:8px 4px 0; }
+.warn{ padding:12px 16px; border-radius:18px; background:var(--warn-bg); color:var(--warn-ink); margin:0 0 14px; font-size:15px; }
+.list-h{ font-size:20px; font-weight:800; margin:30px 2px 12px; display:flex; align-items:baseline; gap:8px; }
+.list-h .count{ color:var(--muted); font-weight:600; font-size:16px; }
+.history{ list-style:none; margin:0; padding:0; }
+.entry{
+  display:block; width:100%; text-align:left; background:var(--surface);
+  border:1px solid var(--rule); border-radius:20px; padding:14px 16px; margin:0 0 10px; box-shadow:var(--shadow);
+}
+.e-date{ display:block; font-size:14px; color:var(--muted); }
+.e-title{
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+  font-weight:800; margin:2px 0 8px;
+}
+.e-meta{ display:flex; justify-content:space-between; align-items:center; gap:10px; font-size:14px; color:var(--muted); }
+.marks{ display:flex; gap:4px; }
+.marks i{ width:8px; height:8px; border-radius:50%; background:var(--sunk); }
+.marks i.on{ background:var(--accent); }
+.empty{ color:var(--muted); padding:8px 4px; }
 
-  .entry-list{display:flex;flex-direction:column;gap:10px;}
-  .entry{
-    background:var(--surface);border:1px solid var(--line);border-radius:10px;
-    padding:14px 15px;text-align:left;width:100%;cursor:pointer;font:inherit;color:inherit;display:block;
-  }
-  .entry:hover,.entry:focus-visible{border-color:var(--accent);}
-  .entry .meta{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:6px;}
-  .entry .num,.entry .date{font-size:12px;color:var(--muted);}
-  .entry .thought{font-family:Georgia,serif;font-size:16px;line-height:1.4;margin:0 0 12px;
-    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-  .entry .thought.empty{color:var(--muted);font-style:italic;}
+/* Editor chrome */
+.top{
+  position:sticky; top:env(safe-area-inset-top,0px); z-index:5;
+  background:color-mix(in srgb, var(--bg) 92%, transparent);
+  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+  margin:0 -18px; padding:6px 18px 10px;
+}
+.bar{ display:flex; justify-content:space-between; align-items:center; min-height:44px; }
+.back{ background:none; border:0; padding:8px 4px; font-weight:800; color:var(--accent); min-height:44px; }
+.saved{ font-size:14px; color:var(--muted); }
+.steps{ display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; padding:2px 0; }
+.steps::-webkit-scrollbar{ display:none; }
+.tab{
+  position:relative; flex:0 0 auto; min-width:40px; height:40px; padding:0 10px;
+  border-radius:999px; border:1px solid var(--rule); background:var(--surface); font-weight:800; color:var(--muted);
+}
+.tab.done{ background:var(--accent-soft); color:var(--accent); border-color:transparent; }
+.tab.on{ background:var(--accent); color:var(--accent-ink); border-color:var(--accent); }
 
-  .track{position:relative;height:26px;margin-top:2px;}
-  .track .rail{position:absolute;top:11px;left:0;right:0;height:2px;background:var(--line);border-radius:2px;}
-  .track .span{position:absolute;top:11px;height:2px;background:var(--shift);}
-  .track .dot{position:absolute;top:6px;width:12px;height:12px;border-radius:50%;margin-left:-6px;background:var(--surface);border:2px solid var(--accent);}
-  .track .dot.after{background:var(--accent);}
-  .track-caption{font-size:12px;color:var(--muted);margin:2px 0 0;}
+.step-h{ display:flex; align-items:center; gap:12px; font-size:23px; font-weight:800; margin:22px 0 8px; }
+.step-h .L{
+  display:grid; place-items:center; width:46px; height:46px; flex:0 0 auto; border-radius:50%;
+  background:var(--accent-soft); color:var(--accent); font-size:22px;
+}
+.prompt{ margin:0 0 18px; color:var(--muted); max-width:60ch; }
+.kind{ margin:-8px 0 18px; padding:12px 16px; border-radius:18px; background:var(--accent-soft); color:var(--ink); font-size:15px; }
 
-  .empty-slot{border:1px dashed var(--line);border-radius:10px;padding:14px 15px;font-size:13px;color:var(--muted);}
+.stuck{
+  margin:14px 0 6px; padding:12px 16px; border-radius:20px; background:var(--surface);
+  border:1px dashed color-mix(in srgb, var(--accent) 50%, transparent);
+}
+.stuck span{ font-size:13px; color:var(--muted); display:block; }
+.stuck p{ margin:2px 0 0; font-weight:700; white-space:pre-wrap; }
 
-  .list-actions{display:flex;flex-direction:column;gap:9px;margin-top:20px;}
+.orig{
+  background:var(--surface); border:1px solid var(--rule); border-radius:24px;
+  padding:18px 18px 12px; box-shadow:var(--shadow); margin-top:10px;
+}
+.orig-k{ display:block; font-size:14px; font-weight:700; color:var(--muted); }
+.orig blockquote{
+  margin:8px 0 10px; padding:12px 16px; border-radius:18px; background:var(--accent-soft);
+  font-size:20px; font-weight:700; line-height:1.4; white-space:pre-wrap;
+}
+.orig-empty{ margin:6px 0 10px; color:var(--muted); }
+.orig-was{ margin:0; color:var(--muted); }
+.orig-was b{ color:var(--ink); }
+.orig .rlabel{ margin-top:16px; }
+label.field{ display:block; font-weight:800; margin:0 0 14px; }
+.meta-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:6px; }
+input[type=text], input[type=date], textarea{
+  display:block; width:100%; margin-top:6px; font:inherit; font-size:17px; font-weight:400; color:var(--ink);
+  background:var(--surface); border:1.5px solid var(--rule); border-radius:16px; padding:12px 14px;
+  -webkit-appearance:none; appearance:none;
+}
+input[type=date]{ min-height:50px; }
+textarea{ min-height:100px; resize:vertical; line-height:1.5; overflow:hidden; }
+input:focus, textarea:focus{ border-color:var(--accent); outline:none; box-shadow:0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent); }
+::placeholder{ color:color-mix(in srgb, var(--muted) 70%, transparent); }
 
-  .btn{font:inherit;font-size:15px;border-radius:9px;padding:12px 16px;cursor:pointer;
-    border:1px solid var(--line);background:var(--surface);color:var(--ink);}
-  .btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
-  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500;}
-  .btn.quiet{background:transparent;}
-  .btn.small{font-size:13px;padding:8px 12px;}
-  .btn.back{font-size:13px;padding:7px 12px;background:transparent;}
-  .btn.delete{font-size:13px;padding:9px 13px;background:transparent;border-color:#C9A6A6;color:#8A4A4A;}
+.q{ margin:0 0 22px; }
+.q > label{ display:block; font-weight:800; font-size:18px; }
+.hint{ margin:2px 0 0; font-size:15px; color:var(--muted); }
+.rlabel{ margin:18px 0 0; font-weight:800; }
+.was{ font-size:15px; color:var(--muted); margin:2px 0 0; }
 
-  details.settings{margin-top:22px;border-top:1px solid var(--line);padding-top:14px;}
-  details.settings summary{font-size:13px;color:var(--muted);cursor:pointer;}
-  .set-body{margin-top:14px;}
-  .field{margin-bottom:12px;}
-  .field label{display:block;font-size:13px;color:var(--muted);margin-bottom:5px;}
-  input[type=text],input[type=url],textarea{
-    width:100%;font:inherit;font-size:16px;color:var(--ink);background:#fff;
-    border:1px solid var(--line);border-radius:8px;padding:10px 11px;resize:vertical;}
-  input:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:var(--accent);}
-  .set-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
-  .sync-note{font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.45;}
+/* Rating slider */
+.rate{ display:flex; align-items:center; gap:10px; }
+.slider{ position:relative; flex:1; height:48px; touch-action:pan-y; cursor:pointer; --p:50; user-select:none; -webkit-user-select:none; }
+.track{ position:absolute; left:15px; right:15px; top:50%; height:10px; margin-top:-5px; border-radius:5px; background:var(--sunk); overflow:hidden; }
+.fill{ height:100%; width:calc(var(--p) * 1%); background:var(--accent); border-radius:5px; }
+.thumb{
+  position:absolute; top:50%; width:30px; height:30px; margin:-15px 0 0 -15px;
+  left:calc(15px + (100% - 30px) * var(--p) / 100);
+  border-radius:50%; background:var(--surface); border:3px solid var(--accent);
+  box-shadow:0 2px 6px rgba(80,40,30,.2);
+}
+.unset .fill{ opacity:0; }
+.unset .thumb{ border-style:dashed; border-color:var(--muted); box-shadow:none; }
+.val{ min-width:4.4em; text-align:right; font-weight:800; font-size:19px; font-variant-numeric:tabular-nums; }
+.unset .val{ font-weight:600; font-size:14px; color:var(--muted); }
 
-  .editor-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
-  .editor-date{font-size:12px;color:var(--muted);}
-  .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px;}
-  .card.accent-card{background:var(--accent-soft);border-color:#B9CFCD;}
-  .card-head{display:flex;align-items:baseline;gap:9px;margin-bottom:6px;}
-  .letter{font-family:Georgia,serif;font-size:13px;color:var(--accent);border:1px solid var(--accent);
-    width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none;}
-  .card h2{font-size:18px;}
-  .prompt{margin:0 0 12px;font-size:13.5px;color:var(--muted);line-height:1.45;max-width:52ch;}
+/* Emotion picker */
+.pick-h{ font-size:17px; font-weight:800; margin:4px 0 4px; }
+.empty-pick{ color:var(--muted); font-size:15px; margin:0 0 6px; }
+.prow{
+  background:var(--surface); border:1px solid var(--rule);
+  border-radius:20px; padding:10px 12px 2px 14px; margin:8px 0; box-shadow:var(--shadow);
+}
+.prow-top{ display:flex; align-items:center; gap:8px; }
+.pname{ font-weight:800; flex:1; }
+.prow .fill{ background:var(--fam); }
+.prow .thumb{ border-color:var(--fam); }
+.prow .unset .thumb{ border-color:var(--muted); }
+.prev{ font-size:14px; color:var(--muted); }
+.x{
+  width:36px; height:36px; border-radius:50%; border:0; background:var(--sunk); color:var(--muted);
+  font-size:20px; line-height:1; flex:0 0 auto;
+}
+.fams{ margin-top:16px; }
+.fam{
+  border:1px solid var(--rule); border-radius:20px; margin:0 0 8px; overflow:hidden;
+  background:color-mix(in srgb, var(--fam) 7%, var(--surface));
+}
+.fam summary{
+  list-style:none; display:flex; align-items:center; gap:10px; padding:10px 16px; min-height:52px;
+  font-weight:800; cursor:pointer;
+}
+.fam summary .dot{ width:14px; height:14px; }
+.fam summary::-webkit-details-marker{ display:none; }
+.fam summary::after{ content:"›"; margin-left:auto; font-size:24px; color:var(--muted); transition:transform .2s; }
+.fam[open] summary::after{ transform:rotate(90deg); }
+.fam .n{ font-weight:600; font-size:14px; color:var(--muted); }
+.chips{ display:flex; flex-wrap:wrap; gap:8px; padding:2px 14px 16px; }
+.chip{
+  font-size:16px; min-height:42px; padding:6px 15px; border-radius:999px; font-weight:600;
+  border:1.5px solid color-mix(in srgb, var(--fam) 45%, transparent);
+  background:var(--surface); color:var(--ink);
+}
+.chip.core{ font-weight:800; }
+.chip.sel{ background:var(--fam); color:var(--on); border-color:var(--fam); font-weight:800; }
+.chip.sel::before{ content:"✓ "; }
+.custom{ display:flex; gap:8px; margin-top:8px; align-items:flex-end; }
+.custom input{ flex:1; }
+.custom button{ min-height:50px; }
+.carry{ width:100%; margin:0 0 12px; }
 
-  .rate-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:14px 0 2px;}
-  .rate-row label{font-size:13px;color:var(--muted);}
-  .rate-val{font-family:Georgia,serif;font-size:21px;color:var(--accent);}
-  input[type=range]{width:100%;accent-color:var(--accent);height:26px;}
+/* Alternatives */
+.alt{ background:var(--surface); border:1px solid var(--rule); border-radius:22px; padding:14px; margin:0 0 12px; box-shadow:var(--shadow); }
+.alt-h{ display:flex; justify-content:space-between; align-items:center; font-weight:800; min-height:36px; }
+.alt textarea{ margin-top:4px; }
+.add{ width:100%; }
 
-  .cores{display:flex;flex-wrap:wrap;gap:6px;}
-  .core{font:inherit;font-size:13.5px;padding:7px 13px;border-radius:999px;cursor:pointer;
-    border:1px solid rgba(0,0,0,.12);color:#2B2823;}
-  .core[aria-expanded=true]{box-shadow:inset 0 0 0 2px rgba(0,0,0,.4);}
-  .panel{margin-top:10px;border:1px solid var(--line);border-radius:10px;padding:12px;background:#fff;}
-  .panel[hidden]{display:none;}
-  .grp{border-top:1px solid #EDF1F0;padding-top:9px;margin-top:9px;}
-  .grp:first-child{border-top:none;padding-top:0;margin-top:0;}
-  .word{font:inherit;font-size:13.5px;border:1px solid var(--line);background:#fff;border-radius:999px;
-    padding:6px 11px;cursor:pointer;color:var(--ink);}
-  .word.sec{font-weight:600;}
-  .tertiary{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
-  .find{margin-top:10px;}
-  .results{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+/* Review */
+.rv{ background:var(--surface); border:1px solid var(--rule); border-radius:22px; margin:0 0 10px; overflow:hidden; box-shadow:var(--shadow); }
+.rv-h{
+  display:flex; align-items:center; gap:10px; width:100%; text-align:left; border:0; background:none;
+  padding:12px 16px 4px; font-weight:800; font-size:17px;
+}
+.rv-h .L{ display:grid; place-items:center; width:30px; height:30px; border-radius:50%; background:var(--accent-soft); color:var(--accent); font-size:15px; }
+.rv-h .edit{ margin-left:auto; font-size:14px; color:var(--accent); }
+.rv-b{ padding:4px 16px 14px 56px; }
+.rv-b p{ margin:4px 0; white-space:pre-wrap; }
+.rv-b .none{ color:var(--muted); font-style:italic; }
+.rv-qa{ margin:6px 0 10px; }
+.rv-qa h4{ font-size:15px; color:var(--muted); font-weight:700; }
+.rv-rate{ font-weight:800; }
+.rv-emo{ list-style:none; margin:4px 0; padding:0; display:flex; flex-wrap:wrap; gap:6px; }
+.rv-emo li{ display:flex; align-items:center; gap:6px; padding:4px 12px; border-radius:999px; background:color-mix(in srgb, var(--fam) 14%, var(--surface)); font-size:15px; }
+.dot{ width:10px; height:10px; border-radius:50%; background:var(--fam); flex:0 0 auto; }
+.rv-actions{ display:grid; gap:10px; margin-top:20px; }
 
-  .emo-row{border-top:1px solid var(--line);padding-top:10px;margin-top:10px;}
-  .emo-top{display:flex;align-items:center;gap:8px;}
-  .swatch{width:12px;height:12px;border-radius:50%;flex:none;border:1px solid rgba(0,0,0,.2);}
-  .emo-top input[type=text]{flex:1;}
-  .emo-val{font-family:Georgia,serif;font-size:18px;color:var(--accent);min-width:34px;text-align:right;}
-  .rm{font:inherit;font-size:18px;line-height:1;border:none;background:transparent;color:var(--muted);cursor:pointer;padding:4px 6px;}
-  .emo-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+/* Bottom nav */
+.nav{
+  position:fixed; left:0; right:0; bottom:0; z-index:6;
+  background:color-mix(in srgb, var(--surface) 94%, transparent);
+  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+  border-top:1px solid var(--rule); padding:10px 18px calc(10px + env(safe-area-inset-bottom,0px));
+}
+.nav-in{ max-width:604px; margin:0 auto; display:flex; gap:10px; }
+.nav-in .primary{ flex:1; }
+.nav-in .ghost{ min-width:96px; }
 
-  .q{border-top:1px solid var(--line);padding-top:12px;margin-top:12px;}
-  .q:first-child{border-top:none;padding-top:0;margin-top:0;}
-  .q label{display:block;font-family:Georgia,serif;font-size:15.5px;margin-bottom:7px;}
-
-  .patterns{display:flex;flex-direction:column;gap:7px;margin-bottom:12px;}
-  .pattern{display:flex;gap:10px;align-items:flex-start;font:inherit;font-size:14.5px;text-align:left;
-    border:1px solid var(--line);background:transparent;border-radius:9px;padding:11px 12px;cursor:pointer;color:var(--ink);width:100%;}
-  .pattern .box{width:18px;height:18px;border:1px solid var(--muted);border-radius:4px;flex:none;margin-top:1px;
-    display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;}
-  .pattern.on{border-color:var(--accent);background:var(--accent-soft);}
-  .pattern.on .box{background:var(--accent);border-color:var(--accent);}
-
-  .shift{margin-top:14px;font-size:14px;font-family:Georgia,serif;}
-  .shift em{color:var(--shift);font-style:normal;}
-
-  .danger-row{margin-top:18px;}
-
-  .savebar{position:fixed;left:0;right:0;bottom:0;padding:12px 16px calc(12px + env(safe-area-inset-bottom));
-    background:rgba(231,236,234,.95);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
-    border-top:1px solid var(--line);}
-  .savebar > div{max-width:640px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;}
-  .save-status{font-size:12.5px;color:var(--muted);}
-  .save-status.done{color:var(--accent);}
-  @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+/* Sheet + toast */
+.sheet-wrap{ position:fixed; inset:0; z-index:20; background:rgba(50,25,20,.4); display:flex; align-items:flex-end; }
+.sheet-wrap[hidden]{ display:none; }
+.sheet{
+  width:100%; max-width:640px; margin:0 auto; background:var(--surface); border-radius:28px 28px 0 0;
+  padding:22px 18px calc(22px + env(safe-area-inset-bottom,0px)); max-height:88vh; overflow:auto;
+}
+.sheet h2{ font-size:21px; font-weight:800; margin-bottom:6px; }
+.sheet p{ margin:0 0 12px; color:var(--muted); font-size:15px; }
+.sheet .stack{ display:grid; gap:10px; }
+.sheet textarea{ min-height:120px; font-size:14px; overflow:auto; }
+.filebtn{ position:relative; display:flex; align-items:center; justify-content:center; }
+.filebtn input{ position:absolute; inset:0; opacity:0; cursor:pointer; }
+.or{ text-align:center; color:var(--muted); font-size:14px; margin:4px 0; }
+.toast{
+  position:fixed; left:50%; bottom:calc(88px + env(safe-area-inset-bottom,0px)); transform:translateX(-50%);
+  z-index:30; background:var(--ink); color:var(--bg); padding:11px 18px; border-radius:999px;
+  font-weight:700; font-size:15px; max-width:90vw; text-align:center; box-shadow:0 6px 20px rgba(60,30,20,.2);
+}
+.toast[hidden]{ display:none; }
+.backup .filerow{ margin-top:12px; padding-top:12px; border-top:1px solid var(--rule); }
+.backup.due .filerow{ border-color:color-mix(in srgb, var(--warn-ink) 25%, transparent); }
+.backup .filerow p{ margin:0 0 10px; }
+.backup .fnote{ margin:0; font-size:14px; color:var(--muted); }
+.backup.due .fnote{ color:var(--warn-ink); }
+@media (prefers-reduced-motion: reduce){ *{ transition:none !important; } }
 </style>
 </head>
 <body>
-
-<header class="masthead">
-  <p class="kicker">Handout 11.1</p>
-  <h1>Alternative Thoughts</h1>
-  <p class="tagline">A worksheet you fill in more than once. Each one is saved.</p>
-</header>
-
-<section id="listView">
-  <div class="progress-line">
-    <span id="progressCount">0 of 7 complete</span>
-    <div class="pips" id="pips"></div>
-  </div>
-
-  <div id="entryList" class="entry-list"></div>
-
-  <div class="list-actions">
-    <button class="btn primary" id="newBtn">Start a new worksheet</button>
-    <button class="btn quiet" id="exportBtn">Export all as text</button>
-  </div>
-
-  <details class="settings">
-    <summary>Backup and sync</summary>
-    <div class="set-body">
-      <p class="sync-note" id="storeMode"></p>
-
-      <div class="field">
-        <label for="endpoint">Google Sheet web app URL</label>
-        <input type="url" id="endpoint" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off">
-      </div>
-      <div class="field">
-        <label for="token">Shared secret (must match the script)</label>
-        <input type="text" id="token" placeholder="Leave blank if you didn't set one" autocomplete="off">
-      </div>
-      <div class="set-row">
-        <button class="btn small" id="saveSettings">Save settings</button>
-        <button class="btn small" id="pushBtn">Send to sheet</button>
-        <button class="btn small" id="pullBtn">Load from sheet</button>
-      </div>
-      <p class="sync-note" id="syncNote">Not connected. Everything stays on this device until you add a URL.</p>
-
-      <div class="set-row" style="margin-top:16px">
-        <button class="btn small" id="jsonOut">Download backup file</button>
-        <button class="btn small" id="jsonIn">Restore from backup file</button>
-        <input type="file" id="fileIn" accept="application/json,.json" hidden>
-      </div>
-      <p class="sync-note">These worksheets hold private material. Anyone with the web app URL and the secret can read the sheet, so keep both to yourself.</p>
-    </div>
-  </details>
-</section>
-
-<section id="editorView" hidden>
-  <div class="editor-top">
-    <button class="btn back" id="backBtn">Back to list</button>
-    <span class="editor-date" id="editorDate"></span>
-  </div>
-
-  <article class="card">
-    <div class="card-head"><span class="letter">A</span><h2>Situation</h2></div>
-    <p class="prompt">The event, thought, or belief that led to the unpleasant emotion.</p>
-    <textarea id="fA" rows="3" placeholder="What happened?"></textarea>
-  </article>
-
-  <article class="card">
-    <div class="card-head"><span class="letter">B</span><h2>Thought / Stuck Point</h2></div>
-    <p class="prompt">The thought tied to the situation above.</p>
-    <textarea id="fB" rows="3" placeholder="Write the thought as you hear it"></textarea>
-    <div class="rate-row"><label for="fBrate">How much do you believe it?</label><output class="rate-val" id="fBrateVal">50</output></div>
-    <input type="range" id="fBrate" min="0" max="100" value="50">
-  </article>
-
-  <article class="card">
-    <div class="card-head"><span class="letter">C</span><h2>Emotions</h2></div>
-    <p class="prompt">Pick a family, then narrow it down. Rate each feeling 0 to 100.</p>
-    <div id="pickC"></div>
-    <div class="emo-list" id="emoC"></div>
-    <div class="emo-actions"><button class="btn small" data-add="C">Type my own</button></div>
-  </article>
-
-  <article class="card">
-    <div class="card-head"><span class="letter">D</span><h2>Exploring questions</h2></div>
-    <p class="prompt">Examine the thought in section B. Is it balanced and factual, or extreme?</p>
-    <div id="questionsD"></div>
-  </article>
-
-  <article class="card">
-    <div class="card-head"><span class="letter">E</span><h2>Thinking patterns</h2></div>
-    <p class="prompt">Tap any pattern the thought falls into.</p>
-    <div class="patterns" id="patternsE"></div>
-    <textarea id="fEother" rows="2" placeholder="Another pattern you notice (optional)"></textarea>
-  </article>
-
-  <article class="card">
-    <div class="card-head"><span class="letter">F</span><h2>Alternative thought</h2></div>
-    <p class="prompt">What else could you say instead? Another way to read the same event.</p>
-    <textarea id="fF" rows="4" placeholder="Write the alternative"></textarea>
-    <div class="rate-row"><label for="fFrate">How much do you believe the alternative?</label><output class="rate-val" id="fFrateVal">50</output></div>
-    <input type="range" id="fFrate" min="0" max="100" value="50">
-  </article>
-
-  <article class="card accent-card">
-    <div class="card-head"><span class="letter">G</span><h2>Rerate the old thought</h2></div>
-    <p class="prompt">How much do you believe the section B thought now?</p>
-    <div class="rate-row"><label for="fGrate">Belief now</label><output class="rate-val" id="fGrateVal">50</output></div>
-    <input type="range" id="fGrate" min="0" max="100" value="50">
-    <div class="shift" id="shiftPreview"></div>
-  </article>
-
-  <article class="card">
-    <div class="card-head"><span class="letter">H</span><h2>Emotions now</h2></div>
-    <p class="prompt">What do you feel now, and how strongly?</p>
-    <div id="pickH"></div>
-    <div class="emo-list" id="emoH"></div>
-    <div class="emo-actions">
-      <button class="btn small" data-add="H">Type my own</button>
-      <button class="btn small" id="copyEmo">Bring over the feelings from C</button>
-    </div>
-  </article>
-
-  <div class="danger-row"><button class="btn delete" id="deleteBtn">Delete this worksheet</button></div>
-</section>
-
-<div class="savebar" id="savebar" hidden>
-  <div>
-    <span class="save-status" id="saveStatus">Not saved yet</span>
-    <button class="btn primary" id="saveBtn">Save worksheet</button>
-  </div>
-</div>
+<div id="app"></div>
+<div class="sheet-wrap" id="sheet" hidden><div class="sheet" id="sheetBody" role="dialog" aria-modal="true"></div></div>
+<div class="toast" id="toast" role="status" hidden></div>
 
 <script>
 (function(){
 "use strict";
 
-var WHEEL=[
- {core:"Happy",color:"#F7F27E",groups:[
-   ["Playful",["Aroused","Cheeky"]],["Content",["Free","Joyful"]],["Interested",["Curious","Inquisitive"]],
-   ["Proud",["Successful","Confident"]],["Accepted",["Respected","Valued"]],["Powerful",["Courageous","Creative"]],
-   ["Peaceful",["Loving","Thankful"]],["Trusting",["Sensitive","Intimate"]],["Optimistic",["Hopeful","Inspired"]]]},
- {core:"Surprised",color:"#C3AEE3",groups:[
-   ["Startled",["Shocked","Dismayed"]],["Confused",["Disillusioned","Perplexed"]],
-   ["Amazed",["Astonished","Awe"]],["Excited",["Eager","Energetic"]]]},
- {core:"Bad",color:"#8FD9AE",groups:[
-   ["Bored",["Indifferent","Apathetic"]],["Busy",["Pressured","Rushed"]],
-   ["Stressed",["Overwhelmed","Out of control"]],["Tired",["Sleepy","Unfocussed"]]]},
- {core:"Fearful",color:"#F6C871",groups:[
-   ["Scared",["Helpless","Frightened"]],["Anxious",["Overwhelmed","Worried"]],["Insecure",["Inadequate","Inferior"]],
-   ["Weak",["Worthless","Insignificant"]],["Rejected",["Excluded","Persecuted"]],["Threatened",["Nervous","Exposed"]]]},
- {core:"Angry",color:"#F79191",groups:[
-   ["Let down",["Betrayed","Resentful"]],["Humiliated",["Disrespected","Ridiculed"]],["Bitter",["Indignant","Violated"]],
-   ["Mad",["Furious","Jealous"]],["Aggressive",["Provoked","Hostile"]],["Frustrated",["Infuriated","Annoyed"]],
-   ["Distant",["Withdrawn","Numb"]],["Critical",["Sceptical","Dismissive"]]]},
- {core:"Disgusted",color:"#B7B7B7",groups:[
-   ["Disapproving",["Judgmental","Embarrassed"]],["Disappointed",["Appalled","Revolted"]],
-   ["Awful",["Nauseated","Detestable"]],["Repelled",["Horrified","Hesitant"]]]},
- {core:"Sad",color:"#9CC5E9",groups:[
-   ["Lonely",["Isolated","Abandoned"]],["Vulnerable",["Victimised","Fragile"]],["Despair",["Grief","Powerless"]],
-   ["Guilty",["Ashamed","Remorseful"]],["Depressed",["Inferior","Empty"]],["Hurt",["Embarrassed","Disappointed"]]]}
+/* ---------- Content from the worksheet ---------- */
+const STEPS = ['A','B','C','D','E','F','G','H','R'];
+const TITLES = {
+  A:'Situation', B:'Thought / Stuck Point', C:'Emotion(s)', D:'Challenging Thoughts',
+  E:'Problematic Patterns', F:'Alternative Thought(s)', G:'Re-rate Old Thought / Stuck Point',
+  H:'Emotion(s) Now', R:'Review'
+};
+const CHALLENGES = [
+  ['evidenceFor','Evidence for?','What facts support this thought?'],
+  ['evidenceAgainst','Evidence against?','What facts don’t fit with it?'],
+  ['habit','Habit or fact?','Is this something I’m used to telling myself, or something I know to be true?'],
+  ['allInfo','Not including all information?','What parts of the full picture does it leave out?'],
+  ['allOrNone','All-or-none?','Does it treat things as only one way or the other?'],
+  ['extreme','Extreme or exaggerated?','Look for words like always, never, must, should, or can’t.'],
+  ['onePiece','Focused on just one piece?','Is it built on one detail of a bigger story?'],
+  ['source','Source dependable?','Where did this thought come from? Is that a reliable source?'],
+  ['possibleLikely','Confusing possible with likely?','It could happen — but how likely is it, really?'],
+  ['feelings','Based on feelings or facts?','Am I treating a feeling as proof?'],
+  ['unrelated','Focused on unrelated parts?','Is it pulling in things that don’t connect to this situation?']
 ];
-var FLAT=[];
-WHEEL.forEach(function(f){
-  FLAT.push({name:f.core,color:f.color});
-  f.groups.forEach(function(g){
-    FLAT.push({name:g[0],color:f.color});
-    g[1].forEach(function(t){FLAT.push({name:t,color:f.color});});
-  });
-});
-
-var QUESTIONS=[
-  ['q1','What is the evidence against this thought?'],
-  ['q2','What information am I not including?'],
-  ['q3','Is this all-or-none, extreme, or exaggerated?'],
-  ['q4','Am I overfocused on just one piece of it?'],
-  ['q5','Is the source of this questionable?'],
-  ['q6','Am I confusing something possible with something definite?'],
-  ['q7','Is this based on feelings or on facts?']
+const PATTERNS = [
+  ['jumping','Jumping to conclusions','Deciding what something means without enough evidence.'],
+  ['exaggerating','Exaggerating or minimizing','Blowing something up, or shrinking something important down.'],
+  ['ignoring','Ignoring important parts','Leaving out details that change the meaning.'],
+  ['oversimplifying','Oversimplifying','Seeing things as all good or all bad, right or wrong.'],
+  ['overgeneralizing','Overgeneralizing','Taking one event and applying it to everything.'],
+  ['mindReading','Mind reading','Assuming I know what someone else is thinking.'],
+  ['emotional','Emotional reasoning','Using a feeling as evidence that something is true.']
 ];
-var PATTERNS=[
-  ['p1','Jumping to conclusions or predicting the future'],
-  ['p2','Ignoring important parts of the situation'],
-  ['p3','Oversimplifying or overreaching'],
-  ['p4','Mind reading'],
-  ['p5','Emotional reasoning']
+const FAMILIES = [
+  {id:'mad', name:'Mad', color:'#D8433A', on:'#FFFFFF',
+   words:['Hurt','Hostile','Angry','Selfish','Hateful','Critical','Distant','Sarcastic','Frustrated','Jealous','Irritated','Skeptical']},
+  {id:'scared', name:'Scared', color:'#E57F22', on:'#1C1105',
+   words:['Confused','Rejected','Helpless','Submissive','Insecure','Anxious','Bewildered','Discouraged','Insignificant','Inadequate','Embarrassed','Overwhelmed']},
+  {id:'sad', name:'Sad', color:'#B53FAA', on:'#FFFFFF',
+   words:['Tired','Bored','Lonely','Depressed','Ashamed','Guilty','Sleepy','Apathetic','Isolated','Inferior','Stupid','Remorseful']},
+  {id:'joyful', name:'Joyful', color:'#E2BD12', on:'#211B02',
+   words:['Excited','Sensuous','Energetic','Cheerful','Creative','Hopeful','Daring','Fascinating','Stimulating','Amused','Playful','Optimistic']},
+  {id:'powerful', name:'Powerful', color:'#3C9F47', on:'#FFFFFF',
+   words:['Aware','Proud','Respected','Appreciated','Important','Faithful','Surprised','Successful','Worthwhile','Valuable','Discerning','Confident']},
+  {id:'peaceful', name:'Peaceful', color:'#3A4FC0', on:'#FFFFFF',
+   words:['Content','Thoughtful','Intimate','Loving','Trusting','Nurturing','Relaxed','Pensive','Responsive','Serene','Secure','Thankful']}
 ];
-var FIELDMAP={fA:'a',fB:'b',fF:'f',fEother:'eOther'};
+const famById = id => FAMILIES.find(f => f.id === id);
 
-var KEY='cpt-alt-thoughts-v2', CFGKEY='cpt-alt-thoughts-cfg', GOAL=7;
-var entries=[], draft=null, dirty=false, timer=null, cfg={endpoint:'',token:''};
-function $(id){return document.getElementById(id);}
-function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
-
-var Store=(function(){
-  var mode='none';
-  try{ localStorage.setItem('__t','1'); localStorage.removeItem('__t'); mode='local'; }
-  catch(e){ if(window.storage) mode='artifact'; }
-  return {
-    mode:mode,
-    get:function(k){
-      if(mode==='local') return Promise.resolve(localStorage.getItem(k));
-      if(mode==='artifact') return window.storage.get(k).then(function(r){return r?r.value:null;}).catch(function(){return null;});
-      return Promise.resolve(null);
-    },
-    set:function(k,v){
-      if(mode==='local'){ localStorage.setItem(k,v); return Promise.resolve(); }
-      if(mode==='artifact') return window.storage.set(k,v);
-      return Promise.resolve();
-    }
-  };
-})();
+/* ---------- Storage ---------- */
+const KEY = 'challengingBeliefs.v1';
+let store = { entries:[], lastBackup:null, lastChange:null, client:'' };
+let canStore = true;
 
 function blank(){
-  var e={id:'w'+Date.now()+Math.floor(Math.random()*999),created:Date.now(),updated:Date.now(),
-    a:'',b:'',bRate:50,f:'',fRate:50,gRate:50,eOther:'',emoC:[],emoH:[],questions:{},patterns:{}};
-  QUESTIONS.forEach(function(q){e.questions[q[0]]='';});
-  PATTERNS.forEach(function(p){e.patterns[p[0]]=false;});
-  return e;
+  const t = Date.now();
+  return { id: 'w' + t.toString(36) + Math.random().toString(36).slice(2,7), created:t, updated:t,
+    date: todayISO(), client: store.client || '', situation:'', thought:'', thoughtBelief:null,
+    emotionsBefore:[], challenges:{}, patterns:{}, alternatives:[{text:'', belief:null}],
+    rerate:null, emotionsAfter:[], lastStep:0 };
 }
-function complete(e){return !!(e.b&&e.b.trim()&&e.f&&e.f.trim());}
-function fmtDate(ts){return new Date(ts).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});}
-
-function renderList(){
-  var done=entries.filter(complete).length;
-  $('progressCount').textContent=done+' of '+GOAL+' complete';
-  var p='';
-  for(var i=0;i<Math.max(GOAL,entries.length);i++) p+='<span class="pip'+(i<done?' on':'')+'"></span>';
-  $('pips').innerHTML=p;
-
-  var host=$('entryList'); host.innerHTML='';
-  var sorted=entries.slice().sort(function(a,b){return b.created-a.created;});
-  sorted.forEach(function(e,i){
-    var b=document.createElement('button'); b.type='button'; b.className='entry';
-    b.innerHTML='<div class="meta"><span class="num">Worksheet '+(entries.length-i)+'</span>'+
-      '<span class="date">'+fmtDate(e.created)+'</span></div>'+
-      '<p class="thought'+(e.b?'':' empty')+'">'+esc(e.b||'No thought written yet')+'</p>'+track(e);
-    b.addEventListener('click',function(){openEntry(e.id);});
-    host.appendChild(b);
+function normalize(e){
+  const b = blank();
+  const n = Object.assign(b, e || {});
+  n.challenges = Object.assign({}, n.challenges || {});
+  n.patterns = Object.assign({}, n.patterns || {});
+  ['situation','thought','date','client'].forEach(k => { if (typeof n[k] !== 'string') n[k] = n[k] == null ? '' : String(n[k]); });
+  ['emotionsBefore','emotionsAfter'].forEach(k => {
+    n[k] = Array.isArray(n[k]) ? n[k].filter(x => x && x.name).map(x => ({ name:String(x.name), family:x.family || 'other', rating: numOrNull(x.rating) })) : [];
   });
-  for(var s=entries.length;s<GOAL;s++){
-    var d=document.createElement('div'); d.className='empty-slot';
-    d.textContent='Worksheet '+(s+1)+' — not started'; host.appendChild(d);
+  n.alternatives = Array.isArray(n.alternatives) && n.alternatives.length
+    ? n.alternatives.map(a => ({ text: String((a && a.text) || ''), belief: numOrNull(a && a.belief) }))
+    : [{text:'', belief:null}];
+  n.thoughtBelief = numOrNull(n.thoughtBelief);
+  n.rerate = numOrNull(n.rerate);
+  if (typeof n.updated !== 'number') n.updated = Date.now();
+  return n;
+}
+function numOrNull(v){ return (typeof v === 'number' && isFinite(v)) ? Math.max(0, Math.min(100, v)) : null; }
+
+function load(){
+  try {
+    localStorage.setItem(KEY + '.test', '1'); localStorage.removeItem(KEY + '.test');
+    const raw = localStorage.getItem(KEY);
+    if (raw) {
+      const s = JSON.parse(raw);
+      if (s && Array.isArray(s.entries)) {
+        store = Object.assign(store, s);
+        store.entries = s.entries.map(normalize);
+      }
+    }
+  } catch (err) { canStore = false; }
+}
+let saveTimer = null;
+function touch(e){
+  if (e) e.updated = Date.now();
+  store.lastChange = Date.now();
+  setSaved('Saving…');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(persist, 250);
+}
+function persist(){
+  clearTimeout(saveTimer); saveTimer = null;
+  let ok = false;
+  if (canStore) {
+    try { localStorage.setItem(KEY, JSON.stringify(store)); ok = true; }
+    catch (err) { canStore = false; }
+  }
+  setSaved(ok ? 'Saved' : 'Saving…');
+  idbSet('store', JSON.stringify(store)).then(good => { if (!ok) setSaved(good ? 'Saved' : 'Not saved on this device'); });
+  scheduleFile();
+}
+function setSaved(t){ const el = document.getElementById('savedNote'); if (el) el.textContent = t; }
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'hidden') return;
+  if (saveTimer) persist();
+  if (fileTimer) { clearTimeout(fileTimer); fileTimer = null; writeFile(); }
+});
+window.addEventListener('pagehide', () => { if (saveTimer) persist(); });
+
+/* ---------- Downloads capability ---------- */
+const dlPromise = (window.claude && typeof window.claude.use === 'function')
+  ? window.claude.use('downloads').catch(() => null)
+  : Promise.resolve(null);
+async function saveFile(filename, data){
+  const dl = await dlPromise;
+  if (!dl) {
+    if (!FRAMED) {
+      try {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([data], { type: /\.json$/.test(filename) ? 'application/json' : 'text/plain' }));
+        a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+        return { ok:true };
+      } catch (err) {}
+    }
+    return { fallback:true };
+  }
+  try { await dl.save({ filename, data }); return { ok:true }; }
+  catch (err) {
+    const code = (err && err.code) || 'unavailable';
+    if (code === 'declined' || code === 'rate_limited') return { err:code };
+    return { fallback:true };
   }
 }
-function track(e){
-  if(!complete(e)) return '<p class="track-caption">Not finished yet</p>';
-  var a=e.bRate,c=e.gRate,lo=Math.min(a,c),hi=Math.max(a,c);
-  return '<div class="track"><div class="rail"></div><div class="span" style="left:'+lo+'%;width:'+(hi-lo)+'%"></div>'+
-    '<div class="dot" style="left:'+a+'%"></div><div class="dot after" style="left:'+c+'%"></div></div>'+
-    '<p class="track-caption">Belief in the thought: '+a+' before, '+c+' after</p>';
+
+/* ---------- On-device autosave: IndexedDB mirror + linked file ---------- */
+const FRAMED = (() => { try { return window.self !== window.top; } catch (e) { return true; } })();
+const FS_API = typeof window.showSaveFilePicker === 'function' && typeof window.showOpenFilePicker === 'function';
+const FS_OK = FS_API && !FRAMED;
+const PICK_TYPES = [{ description:'Worksheet data', accept:{ 'application/json':['.json'] } }];
+const fileLink = { handle:null, name:'', state:'none', lastWrite:null }; // state: none | ready | needs-permission | error
+let fileTimer = null, fileBusy = false, filePending = false;
+
+function idb(){
+  return new Promise((res, rej) => {
+    try {
+      const r = indexedDB.open('challengingBeliefs', 1);
+      r.onupgradeneeded = () => r.result.createObjectStore('kv');
+      r.onsuccess = () => res(r.result);
+      r.onerror = () => rej(r.error);
+    } catch (err) { rej(err); }
+  });
+}
+async function idbGet(k){
+  try {
+    const db = await idb();
+    return await new Promise((res, rej) => { const q = db.transaction('kv').objectStore('kv').get(k); q.onsuccess = () => res(q.result); q.onerror = () => rej(q.error); });
+  } catch (err) { return undefined; }
+}
+async function idbSet(k, v){
+  try {
+    const db = await idb();
+    await new Promise((res, rej) => { const t = db.transaction('kv', 'readwrite'); t.objectStore('kv').put(v, k); t.oncomplete = res; t.onerror = () => rej(t.error); t.onabort = () => rej(t.error); });
+    return true;
+  } catch (err) { return false; }
 }
 
-function show(v){
-  $('listView').hidden=v!=='list'; $('editorView').hidden=v!=='editor'; $('savebar').hidden=v!=='editor';
+function mergeEntries(incoming){
+  let added = 0, updated = 0;
+  incoming.forEach(raw => {
+    if (!raw || !raw.id) return;
+    const n = normalize(raw);
+    const i = store.entries.findIndex(x => x.id === n.id);
+    if (i < 0) { store.entries.push(n); added++; }
+    else if (n.updated > store.entries[i].updated) { store.entries[i] = n; updated++; }
+  });
+  return { added, updated };
+}
+function entriesFrom(obj){ return Array.isArray(obj) ? obj : (obj && Array.isArray(obj.entries) ? obj.entries : null); }
+
+async function recoverFromMirror(){
+  const raw = await idbGet('store');
+  if (!raw || typeof raw !== 'string') return;
+  try {
+    const s = JSON.parse(raw);
+    const inc = entriesFrom(s); if (!inc) return;
+    const r = mergeEntries(inc);
+    if (!store.client && s && typeof s.client === 'string') store.client = s.client;
+    if (r.added || r.updated) { persist(); if (!cur.id) renderHome(); }
+  } catch (err) {}
+}
+
+async function checkPerm(ask){
+  const h = fileLink.handle;
+  if (!h) { fileLink.state = 'none'; return false; }
+  try {
+    let p = await h.queryPermission({ mode:'readwrite' });
+    if (p !== 'granted' && ask) p = await h.requestPermission({ mode:'readwrite' });
+    fileLink.state = p === 'granted' ? 'ready' : 'needs-permission';
+  } catch (err) { fileLink.state = 'error'; }
+  return fileLink.state === 'ready';
+}
+async function syncFromFile(){
+  try {
+    const f = await fileLink.handle.getFile();
+    const t = await f.text(); if (!t.trim()) return 0;
+    const inc = entriesFrom(JSON.parse(t)); if (!inc) return 0;
+    const r = mergeEntries(inc);
+    if (r.added || r.updated) { persist(); if (!cur.id) renderHome(); }
+    return r.added + r.updated;
+  } catch (err) { return 0; }
+}
+async function loadHandle(){
+  if (!FS_OK) return;
+  const h = await idbGet('fileHandle');
+  if (!h || typeof h.queryPermission !== 'function') return;
+  fileLink.handle = h; fileLink.name = h.name;
+  if (await checkPerm(false)) await syncFromFile();
+}
+function scheduleFile(){
+  if (fileLink.state !== 'ready') return;
+  clearTimeout(fileTimer); fileTimer = setTimeout(() => { fileTimer = null; writeFile(); }, 1200);
+}
+async function writeFile(){
+  if (fileLink.state !== 'ready' || !fileLink.handle) return;
+  if (fileBusy) { filePending = true; return; }
+  fileBusy = true;
+  try {
+    const w = await fileLink.handle.createWritable();
+    await w.write(backupData()); await w.close();
+    fileLink.lastWrite = Date.now(); store.lastBackup = fileLink.lastWrite;
+    if (canStore) { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} }
+    refreshBackupCard();
+  } catch (err) {
+    fileLink.state = 'error'; refreshBackupCard(); toast('Couldn’t write to your file');
+  }
+  fileBusy = false;
+  if (filePending) { filePending = false; scheduleFile(); }
+}
+async function startLink(handle){
+  fileLink.handle = handle; fileLink.name = handle.name; fileLink.lastWrite = null;
+  await idbSet('fileHandle', handle);
+  return checkPerm(true);
+}
+async function linkNew(){
+  try {
+    const h = await window.showSaveFilePicker({ suggestedName:'challenging-beliefs-data.json', types:PICK_TYPES });
+    if (!(await startLink(h))) { refreshBackupCard(); toast('Permission is needed to write that file'); return; }
+    await writeFile(); toast('Auto-save is on');
+  } catch (err) { if (!err || err.name !== 'AbortError') { fileLink.state = 'error'; refreshBackupCard(); toast('Couldn’t link that file'); } }
+}
+async function linkOpen(){
+  try {
+    const picked = await window.showOpenFilePicker({ types:PICK_TYPES });
+    const h = picked && picked[0]; if (!h) return;
+    if (!(await startLink(h))) { refreshBackupCard(); toast('Permission is needed to write that file'); return; }
+    const n = await syncFromFile();
+    await writeFile();
+    toast(n ? 'Loaded ' + n + ' worksheet' + (n === 1 ? '' : 's') + ' from the file' : 'Auto-save is on');
+  } catch (err) { if (!err || err.name !== 'AbortError') { fileLink.state = 'error'; refreshBackupCard(); toast('Couldn’t link that file'); } }
+}
+async function reconnect(){
+  if (await checkPerm(true)) { await syncFromFile(); await writeFile(); toast('Auto-save is back on'); }
+  else { refreshBackupCard(); toast('Permission wasn’t granted'); }
+}
+async function unlink(){
+  clearTimeout(fileTimer); fileTimer = null;
+  fileLink.handle = null; fileLink.name = ''; fileLink.state = 'none'; fileLink.lastWrite = null;
+  await idbSet('fileHandle', null);
+  refreshBackupCard(); toast('Auto-save turned off');
+}
+function isDue(){ return needsBackup() && fileLink.state !== 'ready'; }
+function backupInner(due){
+  const linked = !!fileLink.handle && fileLink.state === 'ready';
+  const nm = esc(fileLink.name);
+  const status = linked ? 'Auto-saving to your device' : store.lastBackup ? 'Last backup ' + fmtTime(store.lastBackup) : 'No backup yet';
+  let sub;
+  if (linked) sub = 'Every change is written to ' + nm + (fileLink.lastWrite ? '. Last written ' + fmtTime(fileLink.lastWrite) + '.' : '.');
+  else if (!store.entries.length) sub = 'Save a backup file after you fill one in.';
+  else if (due) sub = 'A few answers aren’t in a backup yet. A quick save keeps them safe.';
+  else sub = 'Everything is safely in your latest backup.';
+  let fr = '';
+  if (fileLink.handle && fileLink.state === 'needs-permission')
+    fr = `<p>Your browser needs a tap to keep writing to ${nm}.</p><div class="row"><button class="primary" data-act="reconnect">Reconnect</button><button class="ghost" data-act="unlink">Unlink</button></div>`;
+  else if (fileLink.handle && fileLink.state === 'error')
+    fr = `<p>Couldn’t write to ${nm}. Reconnect, or stop auto-saving and pick another file.</p><div class="row"><button class="primary" data-act="reconnect">Reconnect</button><button class="ghost" data-act="unlink">Unlink</button></div>`;
+  else if (linked)
+    fr = `<div class="row"><button class="ghost" data-act="unlink">Stop auto-saving</button></div>`;
+  else if (FS_OK)
+    fr = `<div class="row"><button class="btn" data-act="link-new">Auto-save to a file</button><button class="ghost" data-act="link-open">Use existing file</button></div>`;
+  else if (FS_API)
+    fr = `<p class="fnote">To auto-save to a file on your computer, open this page as its own file in Chrome or Edge.</p>`;
+  else
+    fr = `<p class="fnote">This browser can’t auto-save to a file. Your worksheets stay in this browser, and Save backup still works.</p>`;
+  return `<strong>${status}</strong><p>${sub}</p>
+    <div class="row">
+      <button class="${due ? 'primary' : 'btn'}" data-act="backup">Save backup</button>
+      <button class="ghost" data-act="restore-open">Restore</button>
+    </div><div class="filerow">${fr}</div>`;
+}
+function refreshBackupCard(){
+  if (cur.id) return;
+  const el = document.getElementById('backupCard'); if (!el) return;
+  const due = isDue();
+  el.className = 'backup' + (due ? ' due' : '');
+  el.innerHTML = backupInner(due);
+}
+
+/* ---------- Helpers ---------- */
+const app = document.getElementById('app');
+const cur = { id:null, step:0 };
+const openFams = new Set();
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function todayISO(){ const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+function fmtDate(iso){
+  if (!iso) return 'No date';
+  const d = new Date(iso + 'T12:00:00');
+  return isNaN(d) ? iso : d.toLocaleDateString(undefined, { weekday:'short', month:'short', day:'numeric', year:'numeric' });
+}
+function greeting(){ const h = new Date().getHours(); return h < 5 ? 'Hello, night owl' : h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening'; }
+function fmtTime(ms){ return new Date(ms).toLocaleString(undefined, { month:'short', day:'numeric', hour:'numeric', minute:'2-digit' }); }
+function stamp(){ const d = new Date(); return todayISO() + '-' + String(d.getHours()).padStart(2,'0') + String(d.getMinutes()).padStart(2,'0'); }
+function get(id){ return store.entries.find(e => e.id === id); }
+function curEntry(){ return cur.id ? get(cur.id) : null; }
+function setPath(obj, path, val){
+  const parts = path.split('.'); let o = obj;
+  for (let i = 0; i < parts.length - 1; i++) { if (o[parts[i]] == null) o[parts[i]] = {}; o = o[parts[i]]; }
+  o[parts[parts.length - 1]] = val;
+}
+function hasText(v){ return typeof v === 'string' && v.trim().length > 0; }
+function done(e, s){
+  switch (s) {
+    case 'A': return hasText(e.situation);
+    case 'B': return hasText(e.thought);
+    case 'C': return e.emotionsBefore.length > 0;
+    case 'D': return Object.values(e.challenges).some(hasText);
+    case 'E': return Object.values(e.patterns).some(hasText);
+    case 'F': return e.alternatives.some(a => hasText(a.text));
+    case 'G': return e.rerate != null;
+    case 'H': return e.emotionsAfter.length > 0;
+  }
+  return false;
+}
+function isEmpty(e){ return !STEPS.slice(0,8).some(s => done(e, s)) && e.thoughtBelief == null; }
+function famColor(x){ const f = famById(x.family); return f ? f.color : 'var(--muted)'; }
+function autosize(t){ t.style.height = 'auto'; t.style.height = (t.scrollHeight + 3) + 'px'; }
+function autosizeAll(){ app.querySelectorAll('textarea').forEach(autosize); }
+let toastTimer = null;
+function toast(msg){
+  const t = document.getElementById('toast'); t.textContent = msg; t.hidden = false;
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 2600);
+}
+function needsBackup(){ return store.entries.length > 0 && (!store.lastBackup || (store.lastChange || 0) > store.lastBackup); }
+
+/* ---------- Home ---------- */
+function renderHome(){
+  const e = curEntry();
+  if (e && isEmpty(e)) { store.entries = store.entries.filter(x => x.id !== e.id); persist(); }
+  cur.id = null;
+  const list = [...store.entries].sort((a,b) => b.updated - a.updated);
+  const due = isDue();
+  app.innerHTML = `
+    <header class="home-head"><svg class="home-art" viewBox="0 0 140 70" aria-hidden="true"><g opacity=".85"><circle cx="30" cy="38" r="24" fill="#E9A39C"/><circle cx="56" cy="30" r="24" fill="#F2C38F" opacity=".85"/><circle cx="82" cy="38" r="24" fill="#F3DB8C" opacity=".8"/><circle cx="106" cy="30" r="22" fill="#A8CFAE" opacity=".8"/><circle cx="68" cy="46" r="20" fill="#B9B4E2" opacity=".7"/><circle cx="44" cy="48" r="16" fill="#D7A6D0" opacity=".7"/></g></svg><h1>${greeting()}</h1><p>This is your space to slow down and look at a thought from new angles. Everything saves as you go.</p></header>
+    ${canStore ? '' : '<p class="warn">This view can’t save to your device. Save a backup before you close it.</p>'}
+    <button class="primary big" data-act="new">Start a new worksheet</button>
+    <section class="backup ${due ? 'due' : ''}" id="backupCard">${backupInner(due)}</section>
+    <p class="note">Worksheets are stored only on this device. Nothing is sent anywhere.</p>
+    <h2 class="list-h">Your worksheets <span class="count">${list.length}</span></h2>
+    ${list.length ? `<ul class="history">${list.map(itemHTML).join('')}</ul>`
+      : '<p class="empty">When you’re ready, start your first worksheet. There are no wrong answers here, and you can come back to it anytime.</p>'}
+  `;
   window.scrollTo(0,0);
 }
-function openEntry(id){
-  draft=entries.filter(function(e){return e.id===id;})[0]||blank();
-  fill(); show('editor'); status('Saved',true);
+function itemHTML(e){
+  const title = hasText(e.thought) ? e.thought : hasText(e.situation) ? e.situation : 'A worksheet in progress';
+  let meta = '';
+  if (e.thoughtBelief != null) meta = 'Belief ' + e.thoughtBelief + '%' + (e.rerate != null ? ' → ' + e.rerate + '%' : '');
+  const marks = STEPS.slice(0,8).map(s => `<i class="${done(e,s) ? 'on' : ''}"></i>`).join('');
+  const n = STEPS.slice(0,8).filter(s => done(e,s)).length;
+  return `<li><button class="entry" data-open="${e.id}">
+    <span class="e-date">${esc(fmtDate(e.date))}</span>
+    <span class="e-title">${esc(title)}</span>
+    <span class="e-meta"><span>${meta}</span><span class="marks" aria-label="${n} of 8 sections filled">${marks}</span></span>
+  </button></li>`;
 }
-function newEntry(){ draft=blank(); entries.push(draft); fill(); show('editor'); status('Not saved yet',false); }
 
-function fill(){
-  $('editorDate').textContent=fmtDate(draft.created);
-  $('fA').value=draft.a; $('fB').value=draft.b; $('fF').value=draft.f; $('fEother').value=draft.eOther||'';
-  setRange('fBrate',draft.bRate); setRange('fFrate',draft.fRate); setRange('fGrate',draft.gRate);
+/* ---------- Editor ---------- */
+function openEntry(id, step){
+  const e = get(id); if (!e) return renderHome();
+  cur.id = id; cur.step = step != null ? step : (e.lastStep || 0);
+  renderEditor();
+}
+function renderEditor(){
+  const e = curEntry(); const s = STEPS[cur.step];
+  const last = cur.step === STEPS.length - 1;
+  const nextLabel = last ? 'Done' : cur.step === 7 ? 'Review' : 'Next: ' + STEPS[cur.step + 1];
+  app.innerHTML = `
+    <div class="top">
+      <div class="bar"><button class="back" data-act="home">‹ Worksheets</button><span class="saved" id="savedNote">Saved</span></div>
+      <nav class="steps" aria-label="Worksheet sections">
+        ${STEPS.map((x,i) => `<button class="tab ${i === cur.step ? 'on' : ''} ${done(e,x) ? 'done' : ''}" data-step="${i}" ${i === cur.step ? 'aria-current="step"' : ''} aria-label="${esc(TITLES[x])}">${x === 'R' ? 'Review' : x}</button>`).join('')}
+      </nav>
+    </div>
+    <main>${stepHTML(e, s)}</main>
+    <footer class="nav"><div class="nav-in">
+      <button class="ghost" data-act="prev" ${cur.step === 0 ? 'disabled' : ''}>Back</button>
+      <button class="primary" data-act="next">${nextLabel}</button>
+    </div></footer>`;
+  autosizeAll();
+  const on = app.querySelector('.tab.on'); if (on && on.scrollIntoView) on.scrollIntoView({ block:'nearest', inline:'center' });
+}
+function updateTabs(){
+  const e = curEntry(); if (!e) return;
+  app.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('done', done(e, STEPS[i])));
+}
+function goStep(i){
+  const e = curEntry(); if (!e) return;
+  cur.step = Math.max(0, Math.min(STEPS.length - 1, i));
+  e.lastStep = cur.step; persist();
+  renderEditor(); window.scrollTo(0,0);
+}
+function head(L){ return `<h2 class="step-h"><span class="L">${L === 'R' ? '✓' : L}</span>${esc(TITLES[L])}</h2>`; }
+function deltaText(e){
+  if (e.rerate == null || e.thoughtBelief == null) return '';
+  if (e.rerate === e.thoughtBelief) return 'The same as when you started.';
+  return (e.rerate < e.thoughtBelief ? 'Down ' : 'Up ') + Math.abs(e.thoughtBelief - e.rerate) + ' points from when you started.';
+}
+function stuckCard(e){
+  if (!hasText(e.thought)) return '';
+  return `<div class="stuck"><span>Your thought / Stuck Point (B)${e.thoughtBelief != null ? ' · believed ' + e.thoughtBelief + '%' : ''}</span><p>${esc(e.thought)}</p></div>`;
+}
+function slider(key, val, label){
+  const v = val == null ? 50 : val;
+  return `<div class="rate${val == null ? ' unset' : ''}">
+    <div class="slider" role="slider" tabindex="0" aria-label="${esc(label)}" aria-valuemin="0" aria-valuemax="100"
+      aria-valuenow="${v}" aria-valuetext="${val == null ? 'Not rated' : v + '%'}" data-rate="${esc(key)}" style="--p:${v}">
+      <div class="track"><div class="fill"></div></div><div class="thumb"></div>
+    </div>
+    <output class="val">${val == null ? 'Tap to rate' : v + '%'}</output>
+  </div>`;
+}
+function qBlock(defs, group, e){
+  return defs.map(([k, label, hint]) => `
+    <div class="q">
+      <label for="f-${group}-${k}">${esc(label)}</label>
+      <p class="hint">${esc(hint)}</p>
+      <textarea id="f-${group}-${k}" data-f="${group}.${k}" rows="2">${esc(e[group][k] || '')}</textarea>
+    </div>`).join('');
+}
 
-  var qh=$('questionsD'); qh.innerHTML='';
-  QUESTIONS.forEach(function(q){
-    var w=document.createElement('div'); w.className='q';
-    w.innerHTML='<label for="'+q[0]+'">'+q[1]+'</label><textarea id="'+q[0]+'" rows="2"></textarea>';
-    qh.appendChild(w);
-    var ta=w.querySelector('textarea'); ta.value=draft.questions[q[0]]||'';
-    ta.addEventListener('input',function(){draft.questions[q[0]]=ta.value;touch();});
+function stepHTML(e, s){
+  switch (s) {
+  case 'A': return head('A') + `
+    <div class="meta-row">
+      <label class="field">Date<input type="date" data-f="date" value="${esc(e.date)}"></label>
+      <label class="field">Client<input type="text" data-f="client" value="${esc(e.client)}" autocomplete="name"></label>
+    </div>
+    <div class="q"><label for="f-sit">Describe the event, thought, or belief leading to the unpleasant emotion(s).</label>
+    <textarea id="f-sit" data-f="situation" rows="4">${esc(e.situation)}</textarea></div>`;
+
+  case 'B': return head('B') + `
+    <div class="q"><label for="f-th">Write the thought / Stuck Point related to the situation in section A.</label>
+    <textarea id="f-th" data-f="thought" rows="3">${esc(e.thought)}</textarea></div>
+    <p class="rlabel">How much do you believe this thought? (0–100%)</p>
+    ${slider('f:thoughtBelief', e.thoughtBelief, 'How much you believe this thought')}`;
+
+  case 'C': return head('C') +
+    `<p class="prompt">Specify your emotion(s) and rate how strongly you feel each one, from 0 to 100%.</p>` + picker(e, 'emotionsBefore');
+
+  case 'D': return head('D') + stuckCard(e) +
+    `<p class="prompt">Answer whichever questions feel useful. Use the Challenging Questions to examine your automatic thought from section B. Is the thought balanced and factual, or extreme?</p>` +
+    qBlock(CHALLENGES, 'challenges', e);
+
+  case 'E': return head('E') + stuckCard(e) +
+    `<p class="prompt">Decide whether this is one of your problematic patterns of thinking. Write how it fits under any pattern that applies.</p>` +
+    qBlock(PATTERNS, 'patterns', e);
+
+  case 'F': return head('F') + stuckCard(e) +
+    `<p class="prompt">What else can I say instead of the thought in section B? How else can I interpret the event? Rate your belief in each alternative thought from 0 to 100%.</p>
+    <div id="alts">${altsHTML(e)}</div>`;
+
+  case 'G': return head('G') + `
+    <div class="orig">
+      <span class="orig-k">Your original thought</span>
+      ${hasText(e.thought)
+        ? `<blockquote>${esc(e.thought)}</blockquote>`
+        : `<p class="orig-empty">You haven’t written your thought in section B yet.</p><button class="btn" data-step="1">Go to B</button>`}
+      ${e.thoughtBelief != null ? `<p class="orig-was">At first, you believed it <b>${e.thoughtBelief}%</b></p>` : ''}
+      <p class="rlabel">Rerate your belief in your original thought (0–100%)</p>
+      ${slider('f:rerate', e.rerate, 'Rerate your belief in your original thought')}
+      <p class="was" id="delta">${deltaText(e)}</p>
+    </div>`;
+
+  case 'H': {
+    const missing = e.emotionsBefore.filter(x => !e.emotionsAfter.some(y => y.name.toLowerCase() === x.name.toLowerCase()));
+    return head('H') + `<p class="prompt">Now what do you feel? Rate each emotion from 0 to 100%.</p>
+      ${missing.length ? `<button class="btn carry" data-act="carry">Re-rate my feelings from C (${missing.length})</button>` : ''}` +
+      picker(e, 'emotionsAfter');
+  }
+  case 'R': return head('R') + (STEPS.slice(0,8).every(x => done(e,x)) ? '<p class="kind">You worked through every part of this one. That takes real effort.</p>' : '') + reviewHTML(e);
+  }
+  return '';
+}
+
+/* ---------- Emotion picker ---------- */
+function picker(e, list){
+  return `<div class="picked" data-picked="${list}">${pickedRows(e, list)}</div>
+    <div class="fams">${FAMILIES.map(f => famHTML(e, list, f)).join('')}</div>
+    <div class="custom">
+      <label class="field" style="flex:1;margin:0">Another feeling<input type="text" data-custom="${list}" enterkeyhint="done" autocomplete="off"></label>
+      <button class="btn" data-act="custom-add" data-list="${list}">Add</button>
+    </div>`;
+}
+function selected(e, list, name){ return e[list].some(x => x.name.toLowerCase() === name.toLowerCase()); }
+function famCount(e, list, f){ return e[list].filter(x => x.family === f.id).length; }
+function famHTML(e, list, f){
+  const n = famCount(e, list, f);
+  return `<details class="fam" style="--fam:${f.color};--on:${f.on}" data-fam="${f.id}" data-list="${list}" ${openFams.has(list + f.id) ? 'open' : ''}>
+    <summary><span class="dot"></span>${f.name}<span class="n" data-count>${n ? n + ' picked' : ''}</span></summary>
+    <div class="chips">${[f.name, ...f.words].map(w => {
+      const sel = selected(e, list, w);
+      return `<button type="button" class="chip ${sel ? 'sel' : ''} ${w === f.name ? 'core' : ''}" data-chip="${esc(w)}" data-fid="${f.id}" data-list="${list}" aria-pressed="${sel}">${esc(w)}</button>`;
+    }).join('')}</div>
+  </details>`;
+}
+function pickedRows(e, list){
+  const arr = e[list];
+  if (!arr.length) return `<p class="empty-pick">Tap any feelings that fit below${list === 'emotionsBefore' ? '' : ', or bring in the ones from C'}. There’s no right number.</p>`;
+  return `<h3 class="pick-h">Rate each feeling</h3>` + arr.map((x, i) => {
+    let prev = null;
+    if (list === 'emotionsAfter') { const b = e.emotionsBefore.find(y => y.name.toLowerCase() === x.name.toLowerCase()); if (b && b.rating != null) prev = b.rating; }
+    return `<div class="prow" style="--fam:${famColor(x)}">
+      <div class="prow-top"><span class="dot"></span><span class="pname">${esc(x.name)}</span>
+        ${prev != null ? `<span class="prev">was ${prev}%</span>` : ''}
+        <button class="x" data-act="emo-remove" data-list="${list}" data-i="${i}" aria-label="Remove ${esc(x.name)}">×</button></div>
+      ${slider('emo:' + list + ':' + i, x.rating, 'How strongly you feel ' + x.name)}
+    </div>`;
+  }).join('');
+}
+function refreshPicker(list){
+  const e = curEntry(); if (!e) return;
+  const box = app.querySelector(`[data-picked="${list}"]`); if (box) box.innerHTML = pickedRows(e, list);
+  app.querySelectorAll(`.chip[data-list="${list}"]`).forEach(c => {
+    const sel = selected(e, list, c.dataset.chip);
+    c.classList.toggle('sel', sel); c.setAttribute('aria-pressed', String(sel));
   });
-
-  var ph=$('patternsE'); ph.innerHTML='';
-  PATTERNS.forEach(function(p){
-    var b=document.createElement('button'); b.type='button';
-    b.className='pattern'+(draft.patterns[p[0]]?' on':'');
-    b.innerHTML='<span class="box">'+(draft.patterns[p[0]]?'\u2713':'')+'</span><span>'+p[1]+'</span>';
-    b.addEventListener('click',function(){
-      draft.patterns[p[0]]=!draft.patterns[p[0]];
-      b.classList.toggle('on',draft.patterns[p[0]]);
-      b.querySelector('.box').textContent=draft.patterns[p[0]]?'\u2713':'';
-      touch();
-    });
-    ph.appendChild(b);
+  app.querySelectorAll(`.fam[data-list="${list}"]`).forEach(d => {
+    const n = famCount(e, list, famById(d.dataset.fam));
+    d.querySelector('[data-count]').textContent = n ? n + ' picked' : '';
   });
-
-  buildPicker('C'); buildPicker('H');
-  renderEmotions('C'); renderEmotions('H');
-  updateShift();
+  updateTabs();
 }
-function setRange(id,v){ $(id).value=v; $(id+'Val').textContent=v; }
+function toggleEmotion(chip){
+  const e = curEntry(); const list = chip.dataset.list; const name = chip.dataset.chip;
+  const before = chip.getBoundingClientRect().top;
+  const i = e[list].findIndex(x => x.name.toLowerCase() === name.toLowerCase());
+  if (i >= 0) e[list].splice(i, 1); else e[list].push({ name, family: chip.dataset.fid, rating: null });
+  touch(e); refreshPicker(list);
+  const again = app.querySelector(`.chip[data-list="${list}"][data-chip="${CSS.escape(name)}"]`);
+  if (again) window.scrollBy(0, again.getBoundingClientRect().top - before);
+}
+function addCustom(list){
+  const input = app.querySelector(`[data-custom="${list}"]`); if (!input) return;
+  const name = input.value.trim(); if (!name) { input.focus(); return; }
+  const e = curEntry();
+  const known = FAMILIES.find(f => [f.name, ...f.words].some(w => w.toLowerCase() === name.toLowerCase()));
+  if (!selected(e, list, name)) {
+    e[list].push({ name: known ? [known.name, ...known.words].find(w => w.toLowerCase() === name.toLowerCase()) : name, family: known ? known.id : 'other', rating: null });
+    touch(e);
+  }
+  input.value = ''; refreshPicker(list);
+  toast(name + ' added — rate it above');
+}
 
-function buildPicker(which){
-  var host=$('pick'+which); host.innerHTML='';
-  var cores=document.createElement('div'); cores.className='cores';
-  var panel=document.createElement('div'); panel.className='panel'; panel.hidden=true;
-  var find=document.createElement('input');
-  find.type='text'; find.className='find'; find.placeholder='Or search every feeling';
-  var results=document.createElement('div'); results.className='results';
+/* ---------- Alternatives ---------- */
+function altsHTML(e){
+  const many = e.alternatives.length > 1;
+  return e.alternatives.map((a, i) => `
+    <div class="alt">
+      <div class="alt-h"><span>Alternative thought${many ? ' ' + (i + 1) : ''}</span>
+        ${many ? `<button class="x" data-act="alt-remove" data-i="${i}" aria-label="Remove alternative thought ${i + 1}">×</button>` : ''}</div>
+      <textarea data-f="alternatives.${i}.text" rows="3" aria-label="Alternative thought ${i + 1}">${esc(a.text)}</textarea>
+      <p class="rlabel">How much do you believe it? (0–100%)</p>
+      ${slider('alt:' + i, a.belief, 'Belief in alternative thought ' + (i + 1))}
+    </div>`).join('') + `<button class="ghost add" data-act="alt-add">Add another alternative thought</button>`;
+}
+function refreshAlts(){ const box = document.getElementById('alts'); if (box) { box.innerHTML = altsHTML(curEntry()); autosizeAll(); } updateTabs(); }
 
-  WHEEL.forEach(function(fam){
-    var b=document.createElement('button'); b.type='button'; b.className='core';
-    b.style.background=fam.color; b.textContent=fam.core; b.setAttribute('aria-expanded','false');
-    b.addEventListener('click',function(){
-      var open=b.getAttribute('aria-expanded')==='true';
-      var all=cores.querySelectorAll('.core');
-      for(var i=0;i<all.length;i++) all[i].setAttribute('aria-expanded','false');
-      if(open){ panel.hidden=true; return; }
-      b.setAttribute('aria-expanded','true');
-      showFamily(fam,panel,which);
-      panel.hidden=false;
-    });
-    cores.appendChild(b);
+/* ---------- Review ---------- */
+function pct(v){ return v == null ? 'not rated' : v + '%'; }
+function para(t){ return hasText(t) ? `<p>${esc(t)}</p>` : ''; }
+function emoList(arr){
+  return arr.length ? `<ul class="rv-emo">${arr.map(x => `<li style="--fam:${famColor(x)}"><span class="dot"></span>${esc(x.name)} <b>${pct(x.rating)}</b></li>`).join('')}</ul>` : '';
+}
+function reviewHTML(e){
+  const sec = (L, inner) => `<section class="rv"><button class="rv-h" data-step="${STEPS.indexOf(L)}"><span class="L">${L}</span>${esc(TITLES[L])}<span class="edit">Edit</span></button>
+    <div class="rv-b">${inner || '<p class="none">Not filled in</p>'}</div></section>`;
+  const qa = (defs, obj) => defs.filter(d => hasText(obj[d[0]])).map(d => `<div class="rv-qa"><h4>${esc(d[1])}</h4>${para(obj[d[0]])}</div>`).join('');
+  const alts = e.alternatives.filter(a => hasText(a.text)).map(a => `<div class="rv-qa">${para(a.text)}<p class="rv-rate">Belief: ${pct(a.belief)}</p></div>`).join('');
+  return `<p class="prompt">${esc(fmtDate(e.date))}${hasText(e.client) ? ' — ' + esc(e.client) : ''}</p>` +
+    sec('A', para(e.situation)) +
+    sec('B', hasText(e.thought) ? para(e.thought) + `<p class="rv-rate">Belief: ${pct(e.thoughtBelief)}</p>` : '') +
+    sec('C', emoList(e.emotionsBefore)) +
+    sec('D', qa(CHALLENGES, e.challenges)) +
+    sec('E', qa(PATTERNS, e.patterns)) +
+    sec('F', alts) +
+    sec('G', e.rerate != null ? `<p class="rv-rate">Now: ${e.rerate}%${e.thoughtBelief != null ? ' (was ' + e.thoughtBelief + '%)' : ''}</p>` : '') +
+    sec('H', emoList(e.emotionsAfter)) +
+    `<div class="rv-actions">
+      <button class="btn" data-act="export-one">Save this worksheet as a text file</button>
+      <button class="ghost" data-act="reuse">New worksheet with this Stuck Point</button>
+      <button class="ghost danger" data-act="delete">Delete this worksheet</button>
+    </div>`;
+}
+function entryText(e){
+  const L = [];
+  const emo = arr => arr.length ? arr.map(x => '  - ' + x.name + ': ' + pct(x.rating)).join('\n') : '  (none)';
+  L.push('CHALLENGING BELIEFS WORKSHEET', 'Date: ' + (e.date || ''), 'Client: ' + (e.client || ''), '');
+  L.push('A. Situation', e.situation || '(blank)', '');
+  L.push('B. Thought/Stuck Point', e.thought || '(blank)', 'Belief: ' + pct(e.thoughtBelief), '');
+  L.push('C. Emotion(s)', emo(e.emotionsBefore), '');
+  L.push('D. Challenging Thoughts');
+  CHALLENGES.forEach(([k, l]) => L.push(l, '  ' + (hasText(e.challenges[k]) ? e.challenges[k].replace(/\n/g, '\n  ') : '')));
+  L.push('', 'E. Problematic Patterns');
+  PATTERNS.forEach(([k, l]) => L.push(l + ':', '  ' + (hasText(e.patterns[k]) ? e.patterns[k].replace(/\n/g, '\n  ') : '')));
+  L.push('', 'F. Alternative Thought(s)');
+  e.alternatives.forEach((a, i) => { if (hasText(a.text)) L.push((i + 1) + '. ' + a.text, '   Belief: ' + pct(a.belief)); });
+  L.push('', 'G. Re-rate Old Thought/Stuck Point', 'Now: ' + pct(e.rerate) + (e.thoughtBelief != null ? ' (was ' + e.thoughtBelief + '%)' : ''), '');
+  L.push('H. Emotion(s)', emo(e.emotionsAfter), '');
+  return L.join('\n');
+}
+
+/* ---------- Backup & restore ---------- */
+function backupData(){
+  return JSON.stringify({ app:'challenging-beliefs-worksheet', version:1, exportedAt:new Date().toISOString(), entries:store.entries }, null, 2);
+}
+async function doBackup(){
+  if (!store.entries.length) { toast('No worksheets to back up yet'); return; }
+  const data = backupData();
+  const r = await saveFile('challenging-beliefs-backup-' + stamp() + '.json', data);
+  if (r.ok) { store.lastBackup = Date.now(); persist(); toast('Backup saved'); if (!cur.id) renderHome(); }
+  else if (r.err === 'declined') toast('Backup not saved');
+  else if (r.err === 'rate_limited') toast('A save prompt is already open');
+  else openCopySheet(data, true);
+}
+async function exportOne(){
+  const e = curEntry(); if (!e) return;
+  const r = await saveFile('worksheet-' + (e.date || todayISO()) + '.txt', entryText(e));
+  if (r.ok) toast('Worksheet saved');
+  else if (r.err === 'declined') toast('Worksheet not saved');
+  else if (r.err === 'rate_limited') toast('A save prompt is already open');
+  else openCopySheet(entryText(e), false);
+}
+const sheet = document.getElementById('sheet'), sheetBody = document.getElementById('sheetBody');
+function openSheet(html){ sheetBody.innerHTML = html; sheet.hidden = false; }
+function closeSheet(){ sheet.hidden = true; sheetBody.innerHTML = ''; }
+sheet.addEventListener('click', ev => { if (ev.target === sheet) closeSheet(); });
+function openCopySheet(text, isBackup){
+  openSheet(`<h2>Copy ${isBackup ? 'your backup' : 'this worksheet'}</h2>
+    <p>Saving files isn’t available in this view. Copy the text below and keep it somewhere safe, like Notes or Files.${isBackup ? ' You can paste it back in with Restore.' : ''}</p>
+    <div class="stack">
+      <textarea readonly id="copyText">${esc(text)}</textarea>
+      <button class="primary" data-act="copy" data-backup="${isBackup ? 1 : 0}">Copy text</button>
+      <button class="ghost" data-act="sheet-close">Close</button>
+    </div>`);
+}
+function openRestoreSheet(){
+  openSheet(`<h2>Restore from a backup</h2>
+    <p>Restoring adds worksheets from the backup and keeps the newer copy of any that match. Nothing here gets deleted.</p>
+    <div class="stack">
+      <label class="primary filebtn">Choose backup file<input type="file" accept=".json,application/json,text/plain" id="restoreFile"></label>
+      <p class="or">or paste backup text</p>
+      <textarea id="restoreText" aria-label="Backup text"></textarea>
+      <button class="btn" data-act="restore-paste">Restore pasted text</button>
+      <button class="ghost" data-act="sheet-close">Cancel</button>
+    </div>`);
+  document.getElementById('restoreFile').addEventListener('change', ev => {
+    const f = ev.target.files && ev.target.files[0]; if (!f) return;
+    const rd = new FileReader();
+    rd.onload = () => restore(String(rd.result));
+    rd.onerror = () => toast('That file couldn’t be read');
+    rd.readAsText(f);
   });
-
-  find.addEventListener('input',function(){
-    var q=find.value.trim().toLowerCase();
-    results.innerHTML='';
-    if(q.length<2) return;
-    FLAT.filter(function(w){return w.name.toLowerCase().indexOf(q)>-1;}).slice(0,24).forEach(function(w){
-      results.appendChild(wordBtn(w.name,w.color,which,find));
-    });
-  });
-
-  host.appendChild(cores); host.appendChild(panel); host.appendChild(find); host.appendChild(results);
 }
-function showFamily(fam,panel,which){
-  panel.innerHTML='';
-  var head=document.createElement('div'); head.className='grp';
-  var top=wordBtn(fam.core,fam.color,which); top.classList.add('sec');
-  head.appendChild(top);
-  panel.appendChild(head);
-  fam.groups.forEach(function(g){
-    var wrap=document.createElement('div'); wrap.className='grp';
-    var sec=wordBtn(g[0],fam.color,which); sec.classList.add('sec');
-    wrap.appendChild(sec);
-    var tw=document.createElement('div'); tw.className='tertiary';
-    g[1].forEach(function(t){ tw.appendChild(wordBtn(t,fam.color,which)); });
-    wrap.appendChild(tw);
-    panel.appendChild(wrap);
-  });
-}
-function wordBtn(name,color,which,clearInput){
-  var b=document.createElement('button'); b.type='button'; b.className='word'; b.textContent=name;
-  b.addEventListener('click',function(){
-    draft['emo'+which].push({name:name,val:50,color:color});
-    renderEmotions(which); touch();
-    if(clearInput){ clearInput.value=''; clearInput.dispatchEvent(new Event('input')); }
-  });
-  return b;
-}
-function renderEmotions(which){
-  var host=$('emo'+which); host.innerHTML='';
-  var list=draft['emo'+which];
-  list.forEach(function(item,idx){
-    var row=document.createElement('div'); row.className='emo-row';
-    row.innerHTML='<div class="emo-top">'+
-      '<span class="swatch" style="background:'+(item.color||'#ffffff')+'"></span>'+
-      '<input type="text" value="'+esc(item.name)+'" placeholder="Feeling">'+
-      '<span class="emo-val">'+item.val+'</span>'+
-      '<button class="rm" type="button" aria-label="Remove">\u00d7</button></div>'+
-      '<input type="range" min="0" max="100" value="'+item.val+'">';
-    var txt=row.querySelector('input[type=text]'), rng=row.querySelector('input[type=range]'), out=row.querySelector('.emo-val');
-    txt.addEventListener('input',function(){item.name=txt.value;touch();});
-    rng.addEventListener('input',function(){item.val=+rng.value;out.textContent=rng.value;touch();});
-    row.querySelector('.rm').addEventListener('click',function(){list.splice(idx,1);renderEmotions(which);touch();});
-    host.appendChild(row);
-  });
-}
-function updateShift(){
-  var b=+$('fBrate').value, g=+$('fGrate').value, d=b-g, el=$('shiftPreview');
-  if(d>0) el.innerHTML='Your belief in that thought dropped <em>'+d+' points</em>, from '+b+' to '+g+'.';
-  else if(d<0) el.innerHTML='Your belief rose <em>'+(-d)+' points</em>, from '+b+' to '+g+'.';
-  else el.innerHTML='Belief is unchanged at '+b+'. That happens; it often shifts across several worksheets.';
+function restore(text){
+  let obj;
+  try { obj = JSON.parse(text); } catch (err) { toast('That isn’t a backup file from this app'); return; }
+  const incoming = entriesFrom(obj);
+  if (!incoming) { toast('No worksheets found in that backup'); return; }
+  const { added, updated } = mergeEntries(incoming);
+  persist(); closeSheet(); renderHome();
+  toast(`Restored: ${added} added, ${updated} updated`);
 }
 
-function touch(){ dirty=true; status('Unsaved changes',false); clearTimeout(timer); timer=setTimeout(save,2500); }
-function status(t,ok){ var el=$('saveStatus'); el.textContent=t; el.classList.toggle('done',!!ok); }
-function save(){
-  if(!draft) return Promise.resolve();
-  draft.updated=Date.now();
-  if(entries.indexOf(draft)===-1) entries.push(draft);
-  return Store.set(KEY,JSON.stringify(entries)).then(function(){
-    dirty=false;
-    status('Saved '+new Date().toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}),true);
-    renderList();
-    if(cfg.endpoint) push(true);
-  })['catch'](function(){ status('Could not save on this device.',false); });
+/* ---------- Rating sliders ---------- */
+function setRating(key, v){
+  const e = curEntry(); if (!e) return;
+  const parts = key.split(':');
+  if (parts[0] === 'f') e[parts[1]] = v;
+  else if (parts[0] === 'alt') e.alternatives[+parts[1]].belief = v;
+  else if (parts[0] === 'emo') e[parts[1]][+parts[2]].rating = v;
+  touch(e); updateTabs();
+  const d = document.getElementById('delta'); if (d) d.textContent = deltaText(e);
 }
-
-function loadCfg(){
-  return Store.get(CFGKEY).then(function(v){
-    if(v){ try{ cfg=JSON.parse(v)||cfg; }catch(e){} }
-    $('endpoint').value=cfg.endpoint||''; $('token').value=cfg.token||'';
-    syncNote(cfg.endpoint?'Connected. Saves are copied to your sheet.':'Not connected. Everything stays on this device until you add a URL.');
-  });
+function paint(s, v){
+  s.style.setProperty('--p', v);
+  s.setAttribute('aria-valuenow', v); s.setAttribute('aria-valuetext', v + '%');
+  const rate = s.closest('.rate'); rate.classList.remove('unset');
+  rate.querySelector('.val').textContent = v + '%';
 }
-function syncNote(t){ $('syncNote').textContent=t; }
-function push(quiet){
-  if(!cfg.endpoint){ syncNote('Add a web app URL first.'); return; }
-  if(!quiet) syncNote('Sending\u2026');
-  return fetch(cfg.endpoint,{method:'POST',body:JSON.stringify({action:'save',token:cfg.token,entries:entries})})
-    .then(function(r){return r.json();})
-    .then(function(d){
-      if(d&&d.ok) syncNote('Sheet updated '+new Date().toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'})+' \u2014 '+d.count+' worksheets.');
-      else syncNote('The sheet refused it: '+((d&&d.error)||'unknown reason')+'.');
-    })['catch'](function(){ syncNote('Could not reach the sheet. Check the URL, and that the deployment is set to anyone.'); });
+function setFromX(s, x){
+  const r = s.querySelector('.track').getBoundingClientRect();
+  const v = Math.round(Math.max(0, Math.min(1, (x - r.left) / r.width)) * 20) * 5;
+  paint(s, v); setRating(s.dataset.rate, v);
 }
-function pull(){
-  if(!cfg.endpoint){ syncNote('Add a web app URL first.'); return; }
-  syncNote('Loading\u2026');
-  fetch(cfg.endpoint+'?action=load&token='+encodeURIComponent(cfg.token))
-    .then(function(r){return r.json();})
-    .then(function(d){
-      if(!d||!d.ok){ syncNote('The sheet refused it: '+((d&&d.error)||'unknown reason')+'.'); return; }
-      var merged={};
-      entries.concat(d.entries||[]).forEach(function(e){
-        if(!merged[e.id]||(e.updated||0)>(merged[e.id].updated||0)) merged[e.id]=e;
-      });
-      entries=Object.keys(merged).map(function(k){return merged[k];});
-      Store.set(KEY,JSON.stringify(entries)).then(function(){
-        renderList(); syncNote('Loaded. You now have '+entries.length+' worksheets on this device.');
-      });
-    })['catch'](function(){ syncNote('Could not reach the sheet.'); });
-}
-
-function download(name,text,type){
-  var a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([text],{type:type||'text/plain'}));
-  a.download=name; document.body.appendChild(a); a.click(); document.body.removeChild(a);
-}
-function exportText(){
-  if(!entries.length) return;
-  var out=entries.slice().sort(function(a,b){return a.created-b.created;}).map(function(e,i){
-    var L=['ALTERNATIVE THOUGHTS WORKSHEET '+(i+1)+' \u2014 '+fmtDate(e.created),''];
-    L.push('A. Situation: '+(e.a||'\u2014'));
-    L.push('B. Thought / stuck point: '+(e.b||'\u2014')+'  [belief '+e.bRate+']');
-    L.push('C. Emotions: '+(e.emoC.map(function(x){return x.name+' '+x.val;}).join(', ')||'\u2014'));
-    L.push('D. Exploring questions:');
-    QUESTIONS.forEach(function(q){L.push('   '+q[1]+' '+(e.questions[q[0]]||'\u2014'));});
-    var pats=PATTERNS.filter(function(p){return e.patterns[p[0]];}).map(function(p){return p[1];});
-    if(e.eOther) pats.push(e.eOther);
-    L.push('E. Thinking patterns: '+(pats.join('; ')||'\u2014'));
-    L.push('F. Alternative thought: '+(e.f||'\u2014')+'  [belief '+e.fRate+']');
-    L.push('G. Old thought rerated: '+e.gRate);
-    L.push('H. Emotions now: '+(e.emoH.map(function(x){return x.name+' '+x.val;}).join(', ')||'\u2014'));
-    return L.join('\n');
-  }).join('\n\n--------------------\n\n');
-  download('alternative-thoughts.txt',out);
-}
-
-Object.keys(FIELDMAP).forEach(function(id){
-  $(id).addEventListener('input',function(){ draft[FIELDMAP[id]]=$(id).value; touch(); });
+let drag = null;
+document.addEventListener('pointerdown', ev => {
+  const s = ev.target.closest('.slider'); if (!s) return;
+  drag = { s, x:ev.clientX, y:ev.clientY, moved:false, id:ev.pointerId, mouse:ev.pointerType === 'mouse' };
+  if (drag.mouse) { drag.moved = true; setFromX(s, ev.clientX); }
 });
-[['fBrate','bRate'],['fFrate','fRate'],['fGrate','gRate']].forEach(function(p){
-  $(p[0]).addEventListener('input',function(){
-    draft[p[1]]=+$(p[0]).value; $(p[0]+'Val').textContent=$(p[0]).value; updateShift(); touch();
-  });
+document.addEventListener('pointermove', ev => {
+  if (!drag || ev.pointerId !== drag.id) return;
+  const dx = ev.clientX - drag.x, dy = ev.clientY - drag.y;
+  if (!drag.moved) {
+    if (Math.abs(dx) > 6 && Math.abs(dx) > Math.abs(dy)) { drag.moved = true; try { drag.s.setPointerCapture(ev.pointerId); } catch (err) {} }
+    else if (Math.abs(dy) > 8) { drag = null; return; }
+  }
+  if (drag.moved) { ev.preventDefault(); setFromX(drag.s, ev.clientX); }
 });
-var addBtns=document.querySelectorAll('[data-add]');
-for(var i=0;i<addBtns.length;i++){
-  (function(b){
-    b.addEventListener('click',function(){
-      var w=b.getAttribute('data-add');
-      draft['emo'+w].push({name:'',val:50,color:'#FFFFFF'});
-      renderEmotions(w); touch();
-    });
-  })(addBtns[i]);
-}
-$('copyEmo').addEventListener('click',function(){
-  draft.emoH=draft.emoC.map(function(x){return {name:x.name,val:x.val,color:x.color};});
-  renderEmotions('H'); touch();
+document.addEventListener('pointerup', ev => {
+  if (!drag || ev.pointerId !== drag.id) return;
+  setFromX(drag.s, ev.clientX); drag = null;
 });
-$('newBtn').addEventListener('click',newEntry);
-$('saveBtn').addEventListener('click',function(){save();});
-$('exportBtn').addEventListener('click',exportText);
-$('backBtn').addEventListener('click',function(){
-  var p=dirty?save():Promise.resolve();
-  p.then(function(){renderList();show('list');});
+document.addEventListener('pointercancel', () => { drag = null; });
+document.addEventListener('keydown', ev => {
+  const s = ev.target.closest && ev.target.closest('.slider');
+  if (s) {
+    const now = s.closest(".rate").classList.contains("unset") ? 50 : +s.getAttribute("aria-valuenow");
+    let v = null;
+    if (ev.key === 'ArrowRight' || ev.key === 'ArrowUp') v = Math.min(100, now + 5);
+    else if (ev.key === 'ArrowLeft' || ev.key === 'ArrowDown') v = Math.max(0, now - 5);
+    else if (ev.key === 'Home') v = 0; else if (ev.key === 'End') v = 100;
+    else if (ev.key === 'PageUp') v = Math.min(100, now + 20); else if (ev.key === 'PageDown') v = Math.max(0, now - 20);
+    if (v != null) { ev.preventDefault(); paint(s, v); setRating(s.dataset.rate, v); }
+    return;
+  }
+  if (ev.key === 'Enter' && ev.target.dataset && ev.target.dataset.custom) { ev.preventDefault(); addCustom(ev.target.dataset.custom); }
+  if (ev.key === 'Escape' && !sheet.hidden) closeSheet();
 });
-$('deleteBtn').addEventListener('click',function(){
-  var i=entries.indexOf(draft); if(i>-1) entries.splice(i,1);
-  Store.set(KEY,JSON.stringify(entries)).then(function(){
-    draft=null; renderList(); show('list'); if(cfg.endpoint) push(true);
-  });
-});
-$('saveSettings').addEventListener('click',function(){
-  cfg.endpoint=$('endpoint').value.trim(); cfg.token=$('token').value.trim();
-  Store.set(CFGKEY,JSON.stringify(cfg)).then(function(){
-    syncNote(cfg.endpoint?'Saved. Try "Send to sheet" to test it.':'Cleared. Everything stays on this device.');
-  });
-});
-$('pushBtn').addEventListener('click',function(){push(false);});
-$('pullBtn').addEventListener('click',pull);
-$('jsonOut').addEventListener('click',function(){ download('alternative-thoughts-backup.json',JSON.stringify(entries),'application/json'); });
-$('jsonIn').addEventListener('click',function(){ $('fileIn').click(); });
-$('fileIn').addEventListener('change',function(){
-  var f=$('fileIn').files[0]; if(!f) return;
-  var r=new FileReader();
-  r.onload=function(){
-    try{
-      var incoming=JSON.parse(r.result), merged={};
-      entries.concat(incoming).forEach(function(e){
-        if(!merged[e.id]||(e.updated||0)>(merged[e.id].updated||0)) merged[e.id]=e;
-      });
-      entries=Object.keys(merged).map(function(k){return merged[k];});
-      Store.set(KEY,JSON.stringify(entries)).then(function(){
-        renderList(); syncNote('Restored. '+entries.length+' worksheets on this device.');
-      });
-    }catch(err){ syncNote('That file could not be read as a backup.'); }
-  };
-  r.readAsText(f);
-});
-window.addEventListener('beforeunload',function(){ if(dirty) save(); });
 
-Store.get(KEY).then(function(v){
-  if(v){ try{ entries=JSON.parse(v)||[]; }catch(e){ entries=[]; } }
-  return loadCfg();
-}).then(function(){
-  $('storeMode').textContent = Store.mode==='local'
-    ? 'Saving to this browser on this device.'
-    : (Store.mode==='artifact'
-      ? 'Saving inside Claude right now. Download the file to keep worksheets on your own device.'
-      : 'This browser is blocking storage, so use the backup file below.');
-  renderList(); show('list');
+/* ---------- Inputs & clicks ---------- */
+document.addEventListener('input', ev => {
+  const t = ev.target; const f = t.dataset && t.dataset.f; if (!f) return;
+  const e = curEntry(); if (!e) return;
+  setPath(e, f, t.value);
+  if (f === 'client') store.client = t.value;
+  if (t.tagName === 'TEXTAREA') autosize(t);
+  touch(e); updateTabs();
 });
+document.addEventListener('toggle', ev => {
+  const d = ev.target; if (!d.classList || !d.classList.contains('fam')) return;
+  const k = d.dataset.list + d.dataset.fam;
+  if (d.open) openFams.add(k); else openFams.delete(k);
+}, true);
+
+let deleteArmed = null;
+document.addEventListener('click', async ev => {
+  const chip = ev.target.closest('.chip'); if (chip) { toggleEmotion(chip); return; }
+  const open = ev.target.closest('[data-open]'); if (open) { openEntry(open.dataset.open); return; }
+  const stepBtn = ev.target.closest('[data-step]'); if (stepBtn) { goStep(+stepBtn.dataset.step); return; }
+  const b = ev.target.closest('[data-act]'); if (!b) return;
+  const e = curEntry();
+  switch (b.dataset.act) {
+    case 'new': { const n = blank(); store.entries.push(n); persist(); openEntry(n.id, 0); break; }
+    case 'home': persist(); renderHome(); break;
+    case 'prev': goStep(cur.step - 1); break;
+    case 'next': if (cur.step === STEPS.length - 1) { persist(); renderHome(); toast('Nice work. Your worksheet is saved.'); } else goStep(cur.step + 1); break;
+    case 'emo-remove': e[b.dataset.list].splice(+b.dataset.i, 1); touch(e); refreshPicker(b.dataset.list); break;
+    case 'custom-add': addCustom(b.dataset.list); break;
+    case 'carry': {
+      e.emotionsBefore.forEach(x => { if (!selected(e, 'emotionsAfter', x.name)) e.emotionsAfter.push({ name:x.name, family:x.family, rating:null }); });
+      touch(e); b.remove(); refreshPicker('emotionsAfter'); break;
+    }
+    case 'alt-add': e.alternatives.push({ text:'', belief:null }); touch(e); refreshAlts();
+      { const ts = app.querySelectorAll('#alts textarea'); const last = ts[ts.length - 1]; if (last) last.focus(); } break;
+    case 'alt-remove': e.alternatives.splice(+b.dataset.i, 1); touch(e); refreshAlts(); break;
+    case 'backup': await doBackup(); break;
+    case 'restore-open': openRestoreSheet(); break;
+    case 'restore-paste': { const t = document.getElementById('restoreText'); if (t && t.value.trim()) restore(t.value); else toast('Paste your backup text first'); break; }
+    case 'sheet-close': closeSheet(); break;
+    case 'copy': {
+      const ta = document.getElementById('copyText');
+      let ok = false;
+      try { await navigator.clipboard.writeText(ta.value); ok = true; }
+      catch (err) { ta.focus(); ta.select(); try { ok = document.execCommand('copy'); } catch (e2) {} }
+      if (ok) {
+        toast('Copied');
+        if (b.dataset.backup === '1') { store.lastBackup = Date.now(); persist(); if (!cur.id) renderHome(); }
+        closeSheet();
+      } else toast('Text selected — use Copy from the menu');
+      break;
+    }
+    case 'link-new': await linkNew(); break;
+    case 'link-open': await linkOpen(); break;
+    case 'reconnect': await reconnect(); break;
+    case 'unlink': await unlink(); break;
+    case 'export-one': await exportOne(); break;
+    case 'reuse': {
+      const n = blank(); n.thought = e.thought; n.client = e.client;
+      store.entries.push(n); persist(); openEntry(n.id, 0); toast('Stuck Point copied to B'); break;
+    }
+    case 'delete': {
+      if (deleteArmed !== b) {
+        deleteArmed = b; b.textContent = 'Tap again to delete';
+        setTimeout(() => { if (deleteArmed === b) { deleteArmed = null; b.textContent = 'Delete this worksheet'; } }, 4000);
+        break;
+      }
+      deleteArmed = null;
+      store.entries = store.entries.filter(x => x.id !== e.id); store.lastChange = Date.now(); persist();
+      cur.id = null; renderHome(); toast('Worksheet deleted'); break;
+    }
+  }
+});
+window.addEventListener('resize', () => { if (cur.id) autosizeAll(); });
+
+load();
+renderHome();
+try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
+(async () => { await recoverFromMirror(); await loadHandle(); refreshBackupCard(); })();
 })();
 </script>
 </body>
